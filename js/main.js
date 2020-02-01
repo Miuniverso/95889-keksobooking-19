@@ -1,61 +1,60 @@
 'use strict';
+var TYPE_LIST = ['palace', 'flat', 'house', 'bungalo'];
+var CHECKIN_LIST = ['12:00', '13:00', '14:00'];
+var CHECKOUT_LIST = ['12:00', '13:00', '14:00'];
+var FEATURES_LIST = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+var PHOTOS_LIST = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
+var START_VALUE = 0;
+var MAX_VALUE_X = 1200;
+var MAX_VALUE_Y = 630;
+var MIN_VALUE_Y = 130;
+var MAX_TOTAL = 8;
+var WIDTH_PIN = 40 / 2;
+var HEIGHT_PIN = 40;
+
+// массив объявлений
+var ads = [];
 
 // генерация случайного индекса
-function getRandomInRange(min, max) {
+function getRandomValue(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 // генерация рандомного массива
-function getRandomArr(arr) {
-  var newArr = [];
-  var newLength = getRandomInRange(1, arr.length - 1);
-  for (var i = 0; i <= newLength; i++) {
-    // пока не придумала, как сделать рандомную выборку фичей
-    // newArr.push(arr[getRandomInRange(0, arr.length - 1)])
-    newArr.push(arr[i]);
-  }
-  return newArr;
+function getRandomArray(arr) {
+  return arr.slice(0, getRandomValue(1, arr.length - 1));
 }
-// массив объявлений
-var ads = [];
-
-var typeList = ['palace', 'flat', 'house', 'bungalo'];
-var checkinList = ['12:00', '13:00', '14:00'];
-var checkoutList = ['12:00', '13:00', '14:00'];
-var featuresList = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-var photosList = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 
 
 function generateNewAds() {
 
-  for (var i = 0; i < 8; i++) {
+  for (var i = 0; i < MAX_TOTAL; i++) {
 
-    var positionX = getRandomInRange(0, 1200);
-    var positionY = getRandomInRange(130, 630);
+    var positionX = getRandomValue(START_VALUE, MAX_VALUE_X);
+    var positionY = getRandomValue(MIN_VALUE_Y, MAX_VALUE_Y);
 
     ads.push({
       'author': {
         'avatar': 'img/avatars/user0' + (i + 1) + '.png'
       },
       'offer': {
-        'title' : 'Отличное местечко',
+        'title': 'Отличное местечко',
         'address': positionX.toString() + ', ' + positionY.toString(),
         'price': 5000,
-        'type': typeList[getRandomInRange(0, typeList.length - 1)],
+        'type': TYPE_LIST[getRandomValue(START_VALUE, TYPE_LIST.length - 1)],
         'rooms': 2,
         'guests': 4,
-        'checkin': checkinList[getRandomInRange(0, checkinList.length - 1)],
-        'checkout': checkoutList[getRandomInRange(0, checkoutList.length - 1)],
-        'features': getRandomArr(featuresList),
+        'checkin': CHECKIN_LIST[getRandomValue(START_VALUE, CHECKIN_LIST.length - 1)],
+        'checkout': CHECKOUT_LIST[getRandomValue(START_VALUE, CHECKOUT_LIST.length - 1)],
+        'features': getRandomArray(FEATURES_LIST),
         'description': 'Самое шикарное описание',
-        'photos': getRandomArr(photosList)
+        'photos': getRandomArray(PHOTOS_LIST)
       },
-    'location': {
-      'x': positionX,
-      'y': positionY
-    }})
+      'location': {
+        'x': positionX,
+        'y': positionY
+      }});
   }
-  console.log(ads)
 }
 
 generateNewAds();
@@ -68,7 +67,7 @@ var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pi
 function renderPin(pin) {
   var PinClone = pinTemplate.cloneNode(true);
 
-  PinClone.style = 'left: ' + (pin.location.x + 40) + 'px; top: ' + (pin.location.y + 40) + 'px;';
+  PinClone.style = 'left: ' + (pin.location.x + WIDTH_PIN) + 'px; top: ' + (pin.location.y + HEIGHT_PIN) + 'px;';
   PinClone.querySelector('img').src = pin.author.avatar;
   PinClone.querySelector('img').alt = pin.offer.title;
   return PinClone;
