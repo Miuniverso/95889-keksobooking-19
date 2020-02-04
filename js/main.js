@@ -13,7 +13,7 @@ var WIDTH_PIN = 50;
 var HEIGHT_PIN = 70;
 
 // массив объявлений
-var ads = [];
+var posters = [];
 
 // генерация случайного индекса
 function getRandomValue(min, max) {
@@ -33,7 +33,7 @@ function generateNewAds() {
     var positionX = getRandomValue(START_VALUE, MAX_VALUE_X);
     var positionY = getRandomValue(MIN_VALUE_Y, MAX_VALUE_Y);
 
-    ads.push({
+    posters.push({
       'author': {
         'avatar': 'img/avatars/user0' + (i + 1) + '.png'
       },
@@ -65,12 +65,12 @@ var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pi
 
 // генерируем клон из шаблона
 function renderPin(pin) {
-  var PinClone = pinTemplate.cloneNode(true);
+  var pinClone = pinTemplate.cloneNode(true);
 
-  PinClone.style = 'left: ' + (pin.location.x - (WIDTH_PIN / 2)) + 'px; top: ' + (pin.location.y - HEIGHT_PIN) + 'px;';
-  PinClone.querySelector('img').src = pin.author.avatar;
-  PinClone.querySelector('img').alt = pin.offer.title;
-  return PinClone;
+  pinClone.style = 'left: ' + (pin.location.x - (WIDTH_PIN / 2)) + 'px; top: ' + (pin.location.y - HEIGHT_PIN) + 'px;';
+  pinClone.querySelector('img').src = pin.author.avatar;
+  pinClone.querySelector('img').alt = pin.offer.title;
+  return pinClone;
 }
 
 var mapPins = document.querySelector('.map__pins');
@@ -79,8 +79,8 @@ var fragment = document.createDocumentFragment();
 
 // добавляем объявление в разметку
 function addPinsToDOM() {
-  for (var i = 0; i < ads.length; i++) {
-    fragment.appendChild(renderPin(ads[i]));
+  for (var i = 0; i < posters.length; i++) {
+    fragment.appendChild(renderPin(posters[i]));
   }
   mapPins.appendChild(fragment);
 }
