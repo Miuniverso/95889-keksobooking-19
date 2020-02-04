@@ -9,7 +9,7 @@ var MAX_VALUE_X = 1200;
 var MAX_VALUE_Y = 630;
 var MIN_VALUE_Y = 130;
 var MAX_TOTAL = 8;
-var WIDTH_PIN = 40 / 2;
+var WIDTH_PIN = 40;
 var HEIGHT_PIN = 40;
 
 // массив объявлений
@@ -67,7 +67,7 @@ var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pi
 function renderPin(pin) {
   var PinClone = pinTemplate.cloneNode(true);
 
-  PinClone.style = 'left: ' + (pin.location.x + WIDTH_PIN) + 'px; top: ' + (pin.location.y + HEIGHT_PIN) + 'px;';
+  PinClone.style = 'left: ' + (pin.location.x - (WIDTH_PIN / 2)) + 'px; top: ' + (pin.location.y - HEIGHT_PIN) + 'px;';
   PinClone.querySelector('img').src = pin.author.avatar;
   PinClone.querySelector('img').alt = pin.offer.title;
   return PinClone;
