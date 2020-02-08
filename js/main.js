@@ -11,6 +11,11 @@ var MIN_VALUE_Y = 130;
 var MAX_TOTAL = 8;
 var WIDTH_PIN = 50;
 var HEIGHT_PIN = 70;
+var ENTER_KEY = 'Enter';
+var MAIN_PIN_WIDTH = 65;
+var MAIN_PIN_HEIGHT = 65;
+var MAIN_PIN_POINTER_HEIGHT = 10;
+var MAIN_PIN_POINTER_WIDTH = 22;
 
 // массив объявлений
 var posters = [];
@@ -59,8 +64,6 @@ function generateNewAds() {
 
 generateNewAds();
 
-document.querySelector('.map').classList.remove('map--faded');
-
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
 // генерируем клон из шаблона
@@ -86,3 +89,103 @@ function addPinsToDOM() {
 }
 
 addPinsToDOM();
+
+
+// 1.1.3 ТЗ
+var selectElements = document.querySelectorAll('.ad-form fieldset');
+
+function disabledAllFildset() {
+  for (var i = 0; i < selectElements.length - 1; i++) {
+    // console.log(selectElements[i]);
+    selectElements[i].setAttribute('disabled', 'disabled');
+  }
+}
+
+disabledAllFildset();
+
+function notDisabledAllFildset() {
+  for (var i = 0; i < selectElements.length - 1; i++) {
+    selectElements[i].removeAttribute('disabled');
+  }
+}
+
+var mainPin = document.querySelector('.map__pin--main');
+var addressInput = document.querySelector('#address');
+
+// получение координат и приведение их к числовому формату для последующих изменений
+var leftCoordinate = Number((mainPin.style.left).match(/\d*/));
+var topCoordinate = Number((mainPin.style.top).match(/\d*/));
+
+// задание базового положения при неактивном состоянии
+addressInput.setAttribute('value', String((leftCoordinate + Math.round(MAIN_PIN_WIDTH / 2))) + ', ' + String((topCoordinate + Math.round(MAIN_PIN_HEIGHT / 2))));
+
+// изменение координаты при активном состоянии
+function changeСoordinates() {
+  addressInput.setAttribute('value', String((leftCoordinate + Math.round(MAIN_PIN_POINTER_WIDTH / 2))) + ', ' + String((topCoordinate + Math.round(MAIN_PIN_POINTER_HEIGHT))));
+}
+
+// вкл Активное состояние
+function changeOnActiveMode() {
+  document.querySelector('.map').classList.remove('map--faded');
+  document.querySelector('.ad-form').classList.remove('ad-form--disabled');
+  notDisabledAllFildset();
+  changeСoordinates();
+}
+
+// активация только при нажатии левой клавишей мыши
+mainPin.addEventListener('mousedown', function (evt) {
+  if (!evt.button === 0) {
+    // не работает проверка
+    return;
+  } else {
+    changeOnActiveMode();
+  }
+});
+
+// активация только при нажатии Enter
+mainPin.addEventListener('keydown', function (evt) {
+  if (evt.key === ENTER_KEY) {
+    changeOnActiveMode();
+  }
+});
+
+var selectRoom = document.querySelector('#room_number');
+// console.log(selectRoom);
+
+// оплавливаю изменение количества комнат в выпадающем списке
+// НЕ РАБОТАЕТ
+selectRoom.querySelector('change', function (evt) {
+  console.log(evt.target.value);
+});
+
+// for (var i = 0; i < rooms.length; i++) {
+//   if (rooms[i].hasAttribute('selected', true)) {
+//     console.log(rooms[i]);
+//   }
+// }
+
+
+// Поле «Количество комнат» синхронизировано с полем «Количество мест» таким образом, что при выборе
+// количества комнат вводятся ограничения на допустимые варианты выбора количества гостей:
+//
+// 1 комната — «для 1 гостя»;
+// 2 комнаты — «для 2 гостей» или «для 1 гостя»;
+// 3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»;
+// 100 комнат — «не для гостей».
+
+// В этом задании мы запрограммируем сценарий установки соответствия количества гостей (спальных мест) с количеством
+// комнат.
+// Напомним, сценарий проверки нестандартный и решить задачу с помощью одних атрибутов не получится.
+// Есть несколько путей к решению (об это чуть ниже), но пока договоримся: при необходимости
+// вы можете доработать разметку формы.
+
+// Разберём несколько подходов к решению. Первый заключается в физическом ограничении возможности выбора неправильных
+// вариантов. Для этого вы можете или удалять соответствующие элементы option из разметки
+// или добавлять им атрибут disabled. Этот вариант относительно прост в реализации.
+// Правда у него есть один существенный недостаток ‐ при таком подходе возникает проблема в сценарии взаимодействия,
+// когда у пользователя уже выбран вариант, который вы хотите исключить.
+// Произойдёт неявное изменение значения, которое пользователь скорей всего не заметит.
+//
+// Второй подход заключается в использовании встроенного API для валидации.
+// Вы пишите код проверки соответствия и если выбранное количество гостей не подходит под количество комнат,
+// вызываете метод setCustomValidity.
