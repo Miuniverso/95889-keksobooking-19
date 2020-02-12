@@ -88,9 +88,6 @@ function addPinsToDOM() {
   mapPins.appendChild(fragment);
 }
 
-addPinsToDOM();
-
-
 // 1.1.3 ТЗ
 var selectElements = document.querySelectorAll('.ad-form fieldset');
 
@@ -130,6 +127,7 @@ function changeOnActiveMode() {
   document.querySelector('.ad-form').classList.remove('ad-form--disabled');
   notDisabledAllFildset();
   changeСoordinates();
+  addPinsToDOM();
 }
 
 // активация только при нажатии левой клавишей мыши
@@ -150,20 +148,48 @@ mainPin.addEventListener('keydown', function (evt) {
 });
 
 var selectRoom = document.querySelector('#room_number');
-// console.log(selectRoom);
+var selectGuests = document.querySelectorAll('#capacity option');
 
-// оплавливаю изменение количества комнат в выпадающем списке
-// НЕ РАБОТАЕТ
-selectRoom.querySelector('change', function (evt) {
-  console.log(evt.target.value);
-});
+// выбор комнаты и блокировка неподходящих значений количества гостей
+var onCheckGuest = function (count) {
 
-// for (var i = 0; i < rooms.length; i++) {
-//   if (rooms[i].hasAttribute('selected', true)) {
-//     console.log(rooms[i]);
-//   }
-// }
+  for (var i = 0; i <= selectGuests.length - 1; i++) {
+    selectGuests[i].removeAttribute('disabled');
 
+    if (Number(selectGuests[i].value) > Number(count) || selectGuests[i].value === '0') {
+      selectGuests[i].setAttribute('disabled', 'disabled');
+    }
+
+    // не работает
+    if (count === '100') {
+      if (selectGuests[i].value !== '0') {
+        selectGuests[i].setAttribute('disabled', 'disabled');
+      }
+    }
+  }
+};
+
+// деактивирую соответствующие элементы количества гостей
+var onLimitTheGuests = function (evt) {
+  var forGuests = evt.target.value;
+
+  switch (forGuests) {
+    case '1':
+      onCheckGuest(forGuests);
+      break;
+    case '2':
+      onCheckGuest(forGuests);
+      break;
+    case '3':
+      onCheckGuest(forGuests);
+      break;
+    case '100':
+      onCheckGuest(forGuests);
+      break;
+  }
+};
+
+selectRoom.addEventListener('change', onLimitTheGuests);
 
 // Поле «Количество комнат» синхронизировано с полем «Количество мест» таким образом, что при выборе
 // количества комнат вводятся ограничения на допустимые варианты выбора количества гостей:
