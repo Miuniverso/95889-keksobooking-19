@@ -148,70 +148,51 @@ mainPin.addEventListener('keydown', function (evt) {
 });
 
 var selectRoom = document.querySelector('#room_number');
+var selectGuestsAll = document.querySelectorAll('#capacity')[0];
 var selectGuests = document.querySelectorAll('#capacity option');
 
 // выбор комнаты и блокировка неподходящих значений количества гостей
-var onCheckGuest = function (count) {
+var onCheckGuest = function (evt) {
 
-  for (var i = 0; i <= selectGuests.length - 1; i++) {
-    selectGuests[i].removeAttribute('disabled');
+  var count = evt.target.value;
 
-    if (Number(selectGuests[i].value) > Number(count) || selectGuests[i].value === '0') {
-      selectGuests[i].setAttribute('disabled', 'disabled');
+  selectGuests.forEach(function (option) {
+    option.remove();
+  });
+
+  selectGuests.forEach(function (option) {
+    if (option.value !== '0' && Number(option.value) <= Number(count)) {
+      selectGuestsAll.appendChild(option);
     }
 
-    // не работает
     if (count === '100') {
-      if (selectGuests[i].value !== '0') {
-        selectGuests[i].setAttribute('disabled', 'disabled');
-      }
+      selectGuests.forEach(function (element) {
+        element.remove();
+      });
+      selectGuestsAll.appendChild(option);
     }
-  }
+  });
+
+  // for (var i = 0; i <= selectGuests.length - 1; i++) {
+  //   selectGuests[i].removeAttribute('disabled');
+  //
+  //   if (Number(selectGuests[i].value) > Number(count) || selectGuests[i].value === '0') {
+  //     selectGuests[i].setAttribute('disabled', 'disabled');
+  //   }
+  //
+  //   if (count === '100') {
+  //     selectGuests[i].removeAttribute('disabled');
+  //     if (selectGuests[i].value !== '0') {
+  //       selectGuests[i].setAttribute('disabled', 'disabled');
+  //     }
+  //   }
+  // }
 };
 
 // деактивирую соответствующие элементы количества гостей
-var onLimitTheGuests = function (evt) {
-  var forGuests = evt.target.value;
-
-  switch (forGuests) {
-    case '1':
-      onCheckGuest(forGuests);
-      break;
-    case '2':
-      onCheckGuest(forGuests);
-      break;
-    case '3':
-      onCheckGuest(forGuests);
-      break;
-    case '100':
-      onCheckGuest(forGuests);
-      break;
-  }
-};
-
-selectRoom.addEventListener('change', onLimitTheGuests);
-
-// Поле «Количество комнат» синхронизировано с полем «Количество мест» таким образом, что при выборе
-// количества комнат вводятся ограничения на допустимые варианты выбора количества гостей:
+// var onLimitTheGuests = function (evt) {
 //
-// 1 комната — «для 1 гостя»;
-// 2 комнаты — «для 2 гостей» или «для 1 гостя»;
-// 3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»;
-// 100 комнат — «не для гостей».
+//   onCheckGuest(evt.target.value);
+// };
 
-// В этом задании мы запрограммируем сценарий установки соответствия количества гостей (спальных мест) с количеством
-// комнат.
-// Напомним, сценарий проверки нестандартный и решить задачу с помощью одних атрибутов не получится.
-// Есть несколько путей к решению (об это чуть ниже), но пока договоримся: при необходимости
-// вы можете доработать разметку формы.
-
-// Разберём несколько подходов к решению. Первый заключается в физическом ограничении возможности выбора неправильных
-// вариантов. Для этого вы можете или удалять соответствующие элементы option из разметки
-// или добавлять им атрибут disabled. Этот вариант относительно прост в реализации.
-// Правда у него есть один существенный недостаток ‐ при таком подходе возникает проблема в сценарии взаимодействия,
-// когда у пользователя уже выбран вариант, который вы хотите исключить.
-// Произойдёт неявное изменение значения, которое пользователь скорей всего не заметит.
-//
-// Второй подход заключается в использовании встроенного API для валидации.
-// Вы пишите код проверки соответствия и если выбранное количество гостей не подходит под количество комнат,
-// вызываете метод setCustomValidity.
+selectRoom.addEventListener('change', onCheckGuest);
