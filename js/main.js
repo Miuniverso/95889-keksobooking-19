@@ -93,7 +93,6 @@ var selectElements = document.querySelectorAll('.ad-form fieldset');
 
 function disabledAllFildset() {
   for (var i = 0; i < selectElements.length - 1; i++) {
-    // console.log(selectElements[i]);
     selectElements[i].setAttribute('disabled', 'disabled');
   }
 }
@@ -132,10 +131,7 @@ function changeOnActiveMode() {
 
 // активация только при нажатии левой клавишей мыши
 mainPin.addEventListener('mousedown', function (evt) {
-  if (!evt.button === 0) {
-    // не работает проверка
-    return;
-  } else {
+  if (evt.which === 1) {
     changeOnActiveMode();
   }
 });
@@ -148,19 +144,16 @@ mainPin.addEventListener('keydown', function (evt) {
 });
 
 var selectRoom = document.querySelector('#room_number');
-var selectGuestsAll = document.querySelectorAll('#capacity')[0];
+var selectGuestsAll = document.querySelector('#capacity');
 var selectGuests = document.querySelectorAll('#capacity option');
 
 // выбор комнаты и блокировка неподходящих значений количества гостей
-var onCheckGuest = function (evt) {
+var onSelectRoom = function (evt) {
 
   var count = evt.target.value;
 
   selectGuests.forEach(function (option) {
     option.remove();
-  });
-
-  selectGuests.forEach(function (option) {
     if (option.value !== '0' && Number(option.value) <= Number(count)) {
       selectGuestsAll.appendChild(option);
     }
@@ -195,4 +188,4 @@ var onCheckGuest = function (evt) {
 //   onCheckGuest(evt.target.value);
 // };
 
-selectRoom.addEventListener('change', onCheckGuest);
+selectRoom.addEventListener('change', onSelectRoom);
