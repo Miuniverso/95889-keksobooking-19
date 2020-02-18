@@ -39,7 +39,7 @@
     }
   });
   // Экспорт функций модуля
-  window.data = {
+  window.activeMode = {
     changeOnActiveMode: changeOnActiveMode
   };
 })();

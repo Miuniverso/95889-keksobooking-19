@@ -32,7 +32,7 @@
   addressInput.setAttribute('value', String((leftCoordinate + Math.round(MAIN_PIN_WIDTH / 2))) + ', ' + String((topCoordinate + Math.round(MAIN_PIN_HEIGHT / 2))));
 
   // Экспорт данных модуля
-  window.data = {
+  window.inactiveMode = {
     notDisabledAllFildset: notDisabledAllFildset,
     mainPin: mainPin,
     addressInput: addressInput,
