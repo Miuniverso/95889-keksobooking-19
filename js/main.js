@@ -1,3 +1,11 @@
+
+// Кексобукинг
+// data.js — модуль, который создаёт данные;
+// map.js — модуль, который управляет карточками объявлений и метками: добавляет на страницу нужную карточку, отрисовывает метки и осуществляет взаимодействие карточки и метки на карте;
+// card.js — модуль, который отвечает за создание карточки объявлений;
+// pin.js — модуль, который отвечает за создание метки на карте;
+// form.js — модуль, который работает с формой объявления.
+
 'use strict';
 var TYPE_LIST = ['palace', 'flat', 'house', 'bungalo'];
 var CHECKIN_LIST = ['12:00', '13:00', '14:00'];
@@ -165,27 +173,6 @@ var onSelectRoom = function (evt) {
       selectGuestsAll.appendChild(option);
     }
   });
-
-  // for (var i = 0; i <= selectGuests.length - 1; i++) {
-  //   selectGuests[i].removeAttribute('disabled');
-  //
-  //   if (Number(selectGuests[i].value) > Number(count) || selectGuests[i].value === '0') {
-  //     selectGuests[i].setAttribute('disabled', 'disabled');
-  //   }
-  //
-  //   if (count === '100') {
-  //     selectGuests[i].removeAttribute('disabled');
-  //     if (selectGuests[i].value !== '0') {
-  //       selectGuests[i].setAttribute('disabled', 'disabled');
-  //     }
-  //   }
-  // }
 };
-
-// деактивирую соответствующие элементы количества гостей
-// var onLimitTheGuests = function (evt) {
-//
-//   onCheckGuest(evt.target.value);
-// };
 
 selectRoom.addEventListener('change', onSelectRoom);
