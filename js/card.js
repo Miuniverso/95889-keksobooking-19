@@ -87,15 +87,19 @@
     // проверка
     console.log('All card ', allPins);
 
-    window.data.posters.forEach(function (pin, index) {
-      allPins[index].addEventListener('click', function () {
-        cardToPin.appendChild(renderCard(pin));
-      });
-    });
+    // window.data.posters[0]
+
+    cardToPin.appendChild(renderCard(window.data.posters[0]));
+
+    // window.data.posters.forEach(function (pin, index) {
+    //   allPins[index].addEventListener('click', function () {
+    //     cardToPin.appendChild(renderCard(pin));
+    //   });
+    // });
   };
 
   // Экспорт функций модуля
-  window.pins = {
+  window.card = {
     renderCard: renderCard,
     addCardToPin: addCardToPin
   };
