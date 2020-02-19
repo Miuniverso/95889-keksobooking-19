@@ -42,7 +42,8 @@
 
     for (var i = 0; i < array.length; i++) {
       var featureElement = document.createElement('li');
-      featureElement.classList.add('popup__feature popup__feature--' + array[i]);
+      featureElement.classList.add('popup__feature');
+      featureElement.classList.add('popup__feature--' + array[i]);
       newFragment.appendChild(featureElement);
     }
     return newFragment;
@@ -53,9 +54,10 @@
     var newFragment = document.createDocumentFragment();
 
     for (var i = 0; i < array.length; i++) {
-      var featureElement = document.createElement('li');
+      var featureElement = document.createElement('img');
       featureElement.classList.add('popup__photo');
       featureElement.src = array[i];
+      console.log(featureElement);
       newFragment.appendChild(featureElement);
     }
     return newFragment;
@@ -66,7 +68,7 @@
     var cardClone = cardTemplate.cloneNode(true);
     var cardFeatures = cardTemplate.querySelector('.popup__features');
     var cardPhotos = cardTemplate.querySelector('.popup__photos');
-    cardClone.querySelector('popup__avatar').src = poster.author.avatar;
+    cardClone.querySelector('.popup__avatar').src = poster.author.avatar;
     cardClone.querySelector('.popup__title').textContent = poster.offer.title;
     cardClone.querySelector('.popup__text--address').textContent = poster.offer.address;
     cardClone.querySelector('.popup__text--price').textContent = poster.offer.price + '₽/ночь';
@@ -81,15 +83,16 @@
     return cardClone;
   };
 
+  var map = document.querySelector('.map');
+  var mapFilter = document.querySelector('map__filters-container');
+
   var addCardToPin = function () {
-    var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    // var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
     var cardToPin = document.createDocumentFragment();
-    // проверка
-    console.log('All card ', allPins);
 
-    // window.data.posters[0]
+    var newCard = cardToPin.appendChild(renderCard(window.data.posters[0]));
 
-    cardToPin.appendChild(renderCard(window.data.posters[0]));
+    map.insertBefore(newCard, mapFilter);
 
     // window.data.posters.forEach(function (pin, index) {
     //   allPins[index].addEventListener('click', function () {
