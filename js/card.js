@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  // var posters = window.data.posters;
+
   var cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 
   var typesOfHouse = [
@@ -81,8 +81,22 @@
     return cardClone;
   };
 
+  var addCardToPin = function () {
+    var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    var cardToPin = document.createDocumentFragment();
+    // проверка
+    console.log('All card ', allPins);
+
+    window.data.posters.forEach(function (pin, index) {
+      allPins[index].addEventListener('click', function () {
+        cardToPin.appendChild(renderCard(pin));
+      });
+    });
+  };
+
   // Экспорт функций модуля
   window.pins = {
-    renderCard: renderCard
+    renderCard: renderCard,
+    addCardToPin: addCardToPin
   };
 })();

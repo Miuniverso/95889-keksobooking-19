@@ -22,7 +22,8 @@
     document.querySelector('.ad-form').classList.remove('ad-form--disabled');
     window.inactiveMode.notDisabledAllFildset();
     changeСoordinates();
-    window.pins.addPinsToDOM();
+    window.pins.addPinsToDom();
+    window.card.addCardToPin();
   }
 
   // активация только при нажатии левой клавишей мыши
