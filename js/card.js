@@ -2,6 +2,7 @@
 
 (function () {
 
+  var ESC_KEY = 'Escape';
   var cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 
   var typesOfHouse = [
@@ -57,7 +58,8 @@
       var featureElement = document.createElement('img');
       featureElement.classList.add('popup__photo');
       featureElement.src = array[i];
-      console.log(featureElement);
+      featureElement.width = 45;
+      featureElement.height = 40;
       newFragment.appendChild(featureElement);
     }
     return newFragment;
@@ -66,8 +68,8 @@
   // создание карточки
   var renderCard = function (poster) {
     var cardClone = cardTemplate.cloneNode(true);
-    var cardFeatures = cardTemplate.querySelector('.popup__features');
-    var cardPhotos = cardTemplate.querySelector('.popup__photos');
+    var cardFeatures = cardClone.querySelector('.popup__features');
+    var cardPhotos = cardClone.querySelector('.popup__photos');
     cardClone.querySelector('.popup__avatar').src = poster.author.avatar;
     cardClone.querySelector('.popup__title').textContent = poster.offer.title;
     cardClone.querySelector('.popup__text--address').textContent = poster.offer.address;
@@ -87,18 +89,34 @@
   var mapFilter = document.querySelector('map__filters-container');
 
   var addCardToPin = function () {
-    // var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+
     var cardToPin = document.createDocumentFragment();
+    var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    var newPin;
 
-    var newCard = cardToPin.appendChild(renderCard(window.data.posters[0]));
+    var btnClose;
 
-    map.insertBefore(newCard, mapFilter);
+    window.data.posters.forEach(function (pin, index) {
+      allPins[index].addEventListener('click', function () {
+        newPin = cardToPin.appendChild(renderCard(pin));
+        btnClose = newPin.querySelector('.popup__close');
+        map.insertBefore(newPin, mapFilter);
 
-    // window.data.posters.forEach(function (pin, index) {
-    //   allPins[index].addEventListener('click', function () {
-    //     cardToPin.appendChild(renderCard(pin));
-    //   });
-    // });
+
+        if (newPin) {
+          btnClose.addEventListener('click', function () {
+            map.removeChild(newPin);
+          });
+
+          // не работает закрытие по Esc
+          btnClose.addEventListener('mousedown', function (evt) {
+            if (evt.key === ESC_KEY) {
+              map.removeChild(newPin);
+            }
+          });
+        }
+      });
+    });
   };
 
   // Экспорт функций модуля
