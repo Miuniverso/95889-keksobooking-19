@@ -3,8 +3,6 @@
 (function () {
   var WIDTH_PIN = 50;
   var HEIGHT_PIN = 70;
-
-  var posters = window.data.posters;
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
   // генерируем клон из шаблона
@@ -19,22 +17,19 @@
 
   var mapPinsWrapper = document.querySelector('.map__pins');
   // все метки на карте
-  // var allPins = document.querySelector('.map__pins').content.querySelector('.map__pin');
   var fragment = document.createDocumentFragment();
 
   // добавляем объявление в разметку
-  function addPinsToDOM() {
+  function addPinsToDom() {
 
-    for (var i = 0; i < posters.length; i++) {
-      fragment.appendChild(renderPin(posters[i]));
+    for (var i = 0; i < window.serverRequest.posters.length; i++) {
+      fragment.appendChild(renderPin(window.serverRequest.posters[i]));
     }
     mapPinsWrapper.appendChild(fragment);
-    // console.log(mapPinsWrapper)
   }
-
 
   // Экспорт функций модуля
   window.pins = {
-    addPinsToDOM: addPinsToDOM
+    addPinsToDom: addPinsToDom
   };
 })();
