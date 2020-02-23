@@ -93,28 +93,33 @@
     var cardToPin = document.createDocumentFragment();
     var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
     var newPin;
-
     var btnClose;
 
-    window.data.posters.forEach(function (pin, index) {
+    function cardCloseEvents() {
+      btnClose.addEventListener('click', function () {
+        newPin.remove();
+      });
+
+      document.addEventListener('keydown', function (evt) {
+        if (evt.key === ESC_KEY) {
+          newPin.remove();
+        }
+      });
+    }
+
+    window.serverRequest.posters.forEach(function (pin, index) {
       allPins[index].addEventListener('click', function () {
+        // проверка на наличие уже открытых карточек
+        var cardOnMap = document.querySelector('.map__card');
+
+        if (cardOnMap) {
+          cardOnMap.remove();
+        }
         newPin = cardToPin.appendChild(renderCard(pin));
         btnClose = newPin.querySelector('.popup__close');
         map.insertBefore(newPin, mapFilter);
 
-
-        if (newPin) {
-          btnClose.addEventListener('click', function () {
-            map.removeChild(newPin);
-          });
-
-          // не работает закрытие по Esc
-          btnClose.addEventListener('mousedown', function (evt) {
-            if (evt.key === ESC_KEY) {
-              map.removeChild(newPin);
-            }
-          });
-        }
+        cardCloseEvents();
       });
     });
   };

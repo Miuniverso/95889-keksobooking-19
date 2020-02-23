@@ -22,22 +22,11 @@
   // добавляем объявление в разметку
   function addPinsToDom() {
 
-    for (var i = 0; i < window.data.posters.length; i++) {
-      fragment.appendChild(renderPin(window.data.posters[i]));
+    for (var i = 0; i < window.serverRequest.posters.length; i++) {
+      fragment.appendChild(renderPin(window.serverRequest.posters[i]));
     }
     mapPinsWrapper.appendChild(fragment);
-    // console.log(mapPinsWrapper)
-    // console.log(document.querySelectorAll('.map__pin:not(.map__pin--main)'));
   }
-
-  // var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-  //
-  //
-  // allPins.forEach(function (pin) {
-  //   pin.addEventListener('click', function () {
-  //     console.log('CLICK');
-  //   });
-  // });
 
   // Экспорт функций модуля
   window.pins = {
