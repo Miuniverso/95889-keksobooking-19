@@ -8,10 +8,6 @@
   var request = new XMLHttpRequest();
   request.open('GET', 'https://js.dump.academy/keksoboking/data', true);
 
-  // отображение ошибок на странице
-  request.addEventListener('load', onLoad);
-  request.addEventListener('error', showErrorMessage);
-
   function closeError() {
     main.removeChild(document.querySelector('.error'));
   }
@@ -22,24 +18,17 @@
     var errorClone = errorTemplate.cloneNode(true);
     var fragment = document.createDocumentFragment();
 
+    console.log(msg);
+
     errorClone.querySelector('.error__message').innerHTML = msg;
     fragment.appendChild(errorClone);
     main.appendChild(fragment);
 
     // Закрытие окна с ошибкой
-    errorClone.querySelector('.error__button').addEventListener('click', closeError);
     window.addEventListener('click', closeError);
   }
 
-  function onLoad() {
-    if (request.status !== 200) {
-      var errorMessage = 'Ошибка: ' + request.status + ' - ' + request.statusText;
-      showErrorMessage(errorMessage);
-    }
-  }
-
-  request.send();
-
+  // сбор данных с сервера
   function parseOfData() {
     var allData = JSON.parse(request.responseText);
 
@@ -48,10 +37,25 @@
     });
   }
 
+  // отправка запроса и отлавливание ошибок
+  function sendRequest() {
+    try {
+      request.send();
+      if (request.status !== 200) {
+        var errorMessage = 'Ошибка: ' + request.status + ' - ' + request.statusText;
+        showErrorMessage(errorMessage);
+      } else {
+        parseOfData();
+      }
+    } catch (error) {
+      showErrorMessage(error);
+    }
+  }
 
   // Экспорт данных из модуля
   window.serverRequest = {
-    posters: posters,
-    parseOfData: parseOfData
+    request: request,
+    sendRequest: sendRequest,
+    posters: posters
   };
 })();
