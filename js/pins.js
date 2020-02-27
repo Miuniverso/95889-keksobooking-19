@@ -21,7 +21,8 @@
 
   // добавляем объявление в разметку
   function addPinsToDom() {
-
+    // !!! Я ПОЛУЧАЮ ВСЕ ДАННЫЕ, НО ОНИ НЕ ОТОБРАЖАЮТСЯ!!!
+    console.log(window.serverRequest.posters);
     for (var i = 0; i < window.serverRequest.posters.length; i++) {
       fragment.appendChild(renderPin(window.serverRequest.posters[i]));
     }

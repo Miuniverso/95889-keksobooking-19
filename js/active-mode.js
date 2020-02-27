@@ -11,9 +11,38 @@
   var leftCoordinate = window.inactiveMode.leftCoordinate;
   var topCoordinate = window.inactiveMode.topCoordinate;
   var mainPin = window.inactiveMode.mainPin;
+  var errorTemplate = document.querySelector('#error').content.querySelector('.error');
+  var main = document.querySelector('main');
 
   function changeСoordinates() {
     addressInput.setAttribute('value', String((leftCoordinate + Math.round(MAIN_PIN_POINTER_WIDTH / 2))) + ', ' + String((topCoordinate + Math.round(MAIN_PIN_POINTER_HEIGHT))));
+  }
+  // сбор данных с сервера
+  function parseOfData(dataFromServer) {
+
+    var allData = JSON.parse(dataFromServer);
+
+    allData.forEach(function (data) {
+      window.serverRequest.posters.push(data);
+    });
+  }
+
+  // закрытие окна с ошибкой
+  function closeError() {
+    main.removeChild(document.querySelector('.error'));
+  }
+
+  // появление окна с ошибкой
+  function showErrorMessage(msg) {
+
+    var errorClone = errorTemplate.cloneNode(true);
+    var fragment = document.createDocumentFragment();
+
+    errorClone.querySelector('.error__message').innerHTML = msg;
+    fragment.appendChild(errorClone);
+    main.appendChild(fragment);
+    // Закрытие окна с ошибкой
+    window.addEventListener('click', closeError);
   }
 
   // вкл Активное состояние
@@ -22,7 +51,8 @@
     document.querySelector('.ad-form').classList.remove('ad-form--disabled');
     window.inactiveMode.notDisabledAllFildset();
     changeСoordinates();
-    window.serverRequest.sendRequest();
+    // window.serverRequest.sendRequest();
+    window.serverRequest.loadRequest('https://js.dump.academy/keksobooking/data', parseOfData, showErrorMessage);
     window.pins.addPinsToDom();
     window.card.addCardToPin();
   }

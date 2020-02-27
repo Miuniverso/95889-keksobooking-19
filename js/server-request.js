@@ -2,60 +2,37 @@
 
 (function () {
   var posters = [];
-  var errorTemplate = document.querySelector('#error').content.querySelector('.error');
-  var main = document.querySelector('main');
 
-  var request = new XMLHttpRequest();
-  request.open('GET', 'https://js.dump.academy/keksoboking/data', true);
+  function loadRequest(url, onSuccess, onError) {
+    var request = new XMLHttpRequest();
 
-  function closeError() {
-    main.removeChild(document.querySelector('.error'));
-  }
-
-  // появление окна с ошибкой
-  function showErrorMessage(msg) {
-
-    var errorClone = errorTemplate.cloneNode(true);
-    var fragment = document.createDocumentFragment();
-
-    console.log(msg);
-
-    errorClone.querySelector('.error__message').innerHTML = msg;
-    fragment.appendChild(errorClone);
-    main.appendChild(fragment);
-
-    // Закрытие окна с ошибкой
-    window.addEventListener('click', closeError);
-  }
-
-  // сбор данных с сервера
-  function parseOfData() {
-    var allData = JSON.parse(request.responseText);
-
-    allData.forEach(function (data) {
-      posters.push(data);
-    });
-  }
-
-  // отправка запроса и отлавливание ошибок
-  function sendRequest() {
-    try {
-      request.send();
-      if (request.status !== 200) {
-        var errorMessage = 'Ошибка: ' + request.status + ' - ' + request.statusText;
-        showErrorMessage(errorMessage);
+    request.addEventListener('load', function () {
+      if (request.status === 200) {
+        onSuccess(request.responseText);
       } else {
-        parseOfData();
+        onError('Cтатус ответа: ' + request.status + ' ' + request.statusText);
       }
-    } catch (error) {
-      showErrorMessage(error);
-    }
+    });
+
+    request.addEventListener('error', function () {
+      onError('Произошла ошибка соединения');
+    });
+
+    request.addEventListener('timeout', function () {
+      onError('Запрос не успел выполниться за ' + request.timeout + 'мс');
+    });
+
+    request.timeout = 10000; // 10s
+
+    request.open('GET', url, true);
+    request.send();
   }
 
   // Экспорт данных из модуля
   window.serverRequest = {
-    request: request,
-    sendRequest: sendRequest,
+    loadRequest: loadRequest,
+    // request: request,
+    // sendRequest: sendRequest,
     posters: posters
   };
 })();
