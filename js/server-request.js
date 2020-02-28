@@ -3,7 +3,7 @@
 (function () {
   var posters = [];
 
-  function loadRequest(url, onSuccess, onError) {
+  function onSuccesLoad(url, onSuccess, onError) {
     var request = new XMLHttpRequest();
 
     request.addEventListener('load', function () {
@@ -30,9 +30,7 @@
 
   // Экспорт данных из модуля
   window.serverRequest = {
-    loadRequest: loadRequest,
-    // request: request,
-    // sendRequest: sendRequest,
+    onSuccesLoad: onSuccesLoad,
     posters: posters
   };
 })();

@@ -17,14 +17,17 @@
   function changeСoordinates() {
     addressInput.setAttribute('value', String((leftCoordinate + Math.round(MAIN_PIN_POINTER_WIDTH / 2))) + ', ' + String((topCoordinate + Math.round(MAIN_PIN_POINTER_HEIGHT))));
   }
-  // сбор данных с сервера
-  function parseOfData(dataFromServer) {
+
+  // получение и рендер данных с сервера
+  function getAndRenderData(dataFromServer) {
 
     var allData = JSON.parse(dataFromServer);
 
     allData.forEach(function (data) {
       window.serverRequest.posters.push(data);
     });
+    window.pins.addPinsToDom();
+    window.card.addCardToPin();
   }
 
   // закрытие окна с ошибкой
@@ -51,10 +54,7 @@
     document.querySelector('.ad-form').classList.remove('ad-form--disabled');
     window.inactiveMode.notDisabledAllFildset();
     changeСoordinates();
-    // window.serverRequest.sendRequest();
-    window.serverRequest.loadRequest('https://js.dump.academy/keksobooking/data', parseOfData, showErrorMessage);
-    window.pins.addPinsToDom();
-    window.card.addCardToPin();
+    window.serverRequest.onSuccesLoad('https://js.dump.academy/keksobooking/data', getAndRenderData, showErrorMessage);
   }
 
   // активация только при нажатии левой клавишей мыши
