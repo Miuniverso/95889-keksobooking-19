@@ -66,7 +66,7 @@
   }
 
   // создание карточки
-  var renderCard = function (poster) {
+  function renderCard(poster) {
     var cardClone = cardTemplate.cloneNode(true);
     var cardFeatures = cardClone.querySelector('.popup__features');
     var cardPhotos = cardClone.querySelector('.popup__photos');
@@ -83,13 +83,12 @@
     cardPhotos.appendChild(createPhotos(poster.offer.photos));
     cardClone.querySelector('.popup__description').textContent = poster.offer.description;
     return cardClone;
-  };
+  }
 
   var map = document.querySelector('.map');
   var mapFilter = document.querySelector('map__filters-container');
 
-  var addCardToPin = function () {
-
+  function addCardToPin() {
     var cardToPin = document.createDocumentFragment();
     var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
     var newPin;
@@ -122,7 +121,7 @@
         cardCloseEvents();
       });
     });
-  };
+  }
 
   // Экспорт функций модуля
   window.card = {

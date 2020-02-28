@@ -3,37 +3,34 @@
 (function () {
   var posters = [];
 
-  var request = new XMLHttpRequest();
-  request.open('GET', 'https://js.dump.academy/keksobooking/data', true);
-  request.addEventListener('load', onLoad);
-  request.addEventListener('error', onError);
-  // потом заменю консоль лог
-  function onError(msg) {
-    console.log('Сработало следующая ошибка: ' + msg);
-  }
+  function onSuccesLoad(url, onSuccess, onError) {
+    var request = new XMLHttpRequest();
 
-  function onLoad() {
-    if (request.status !== 200) {
-      console.log('Ответ' + request.status + ': ' + request.statusText);
-    } else {
-      console.log('Успешная загрузка');
-    }
-  }
-
-  request.send();
-
-  function parseOfData() {
-    var allData = JSON.parse(request.responseText);
-
-    allData.forEach(function (data) {
-      posters.push(data);
+    request.addEventListener('load', function () {
+      if (request.status === 200) {
+        onSuccess(request.responseText);
+      } else {
+        onError('Cтатус ответа: ' + request.status + ' ' + request.statusText);
+      }
     });
-  }
 
+    request.addEventListener('error', function () {
+      onError('Произошла ошибка соединения');
+    });
+
+    request.addEventListener('timeout', function () {
+      onError('Запрос не успел выполниться за ' + request.timeout + 'мс');
+    });
+
+    request.timeout = 10000; // 10s
+
+    request.open('GET', url, true);
+    request.send();
+  }
 
   // Экспорт данных из модуля
   window.serverRequest = {
-    posters: posters,
-    parseOfData: parseOfData
+    onSuccesLoad: onSuccesLoad,
+    posters: posters
   };
 })();
