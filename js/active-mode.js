@@ -19,18 +19,18 @@
   }
 
   // получение и рендер данных с сервера
-  function getAndRenderData(dataFromServer) {
-
-    var allData = JSON.parse(dataFromServer);
-
-    allData.forEach(function (data) {
-      window.serverRequest.posters.push(data);
-    });
-    var data = window.filter.filterByData(window.serverRequest.posters);
-    // window.filter.filterByData(window.serverRequest.posters);
-    window.pins.addPinsToDom(data);
-    window.card.addCardToPin(data);
-  }
+  // function getAndRenderData(dataFromServer) {
+  //
+  //   var allData = JSON.parse(dataFromServer);
+  //
+  //   allData.forEach(function (data) {
+  //     window.serverRequest.posters.push(data);
+  //   });
+  //   var data = window.filter.filterByData(window.serverRequest.posters);
+  //   // window.filter.filterByData(window.serverRequest.posters);
+  //   window.pins.addPinsToDom(data);
+  //   window.card.addCardToPin(data);
+  // }
 
   // закрытие окна с ошибкой
   function closeError() {
@@ -56,20 +56,34 @@
     document.querySelector('.ad-form').classList.remove('ad-form--disabled');
     window.inactiveMode.notDisabledAllFildset();
     changeСoordinates();
-    window.serverRequest.onSuccesLoad('https://js.dump.academy/keksobooking/data', getAndRenderData, showErrorMessage);
+    window.serverRequest.onSuccesLoad('https://js.dump.academy/keksobooking/data', window.filter.filterByData, showErrorMessage);
   }
 
   // активация только при нажатии левой клавишей мыши
   mainPin.addEventListener('mousedown', function (evt) {
+
+    var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+
     if (evt.which === 1) {
-      changeOnActiveMode();
+      if (allPins.length !== 0) {
+        return;
+      } else {
+        changeOnActiveMode();
+      }
     }
   });
 
   // активация только при нажатии Enter
   mainPin.addEventListener('keydown', function (evt) {
+
+    var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+
     if (evt.key === ENTER_KEY) {
-      changeOnActiveMode();
+      if (allPins.length !== 0) {
+        return;
+      } else {
+        changeOnActiveMode();
+      }
     }
   });
   // Экспорт функций модуля

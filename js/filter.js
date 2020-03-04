@@ -35,7 +35,8 @@
     });
   }
 
-  function filterByData(posters) {
+  function filterByData() {
+
     var filterSelectList = document.querySelector('.map__filters').querySelectorAll('select');
     // var featuresList = document.querySelector('#housing-features').querySelectorAll('input');
 
@@ -43,7 +44,7 @@
       return item.value !== 'any';
     });
 
-    filterPosters = posters.slice();
+    filterPosters = window.serverRequest.posters;
 
     filterSelectList.forEach(function (filter) {
       switch (filter.id) {
@@ -62,6 +63,9 @@
       }
     });
 
+    window.pins.addPinsToDom(filterPosters.slice(0, 5));
+    window.card.addCardToPin(filterPosters.slice(0, 5));
+
     return filterPosters;
   }
 
@@ -69,7 +73,7 @@
     // console.log('Обновила объявления + удалила предыдущие + удалила карточку');
     window.pins.deletePins();
     window.card.removeCard();
-    var data = filterByData(window.serverRequest.posters);
+    var data = filterByData();
     // filterByData(window.serverRequest.posters);
     window.pins.addPinsToDom(data);
     window.card.addCardToPin(data);
