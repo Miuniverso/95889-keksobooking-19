@@ -26,8 +26,10 @@
     allData.forEach(function (data) {
       window.serverRequest.posters.push(data);
     });
-    window.pins.addPinsToDom();
-    window.card.addCardToPin();
+    var data = window.filter.filterByData(window.serverRequest.posters);
+    // window.filter.filterByData(window.serverRequest.posters);
+    window.pins.addPinsToDom(data);
+    window.card.addCardToPin(data);
   }
 
   // закрытие окна с ошибкой
