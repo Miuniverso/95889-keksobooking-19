@@ -8,7 +8,14 @@
 
     request.addEventListener('load', function () {
       if (request.status === 200) {
-        onSuccess(request.responseText);
+
+        var allData = JSON.parse(request.responseText);
+
+        allData.forEach(function (data) {
+          window.serverRequest.posters.push(data);
+        });
+
+        onSuccess(posters);
       } else {
         onError('Cтатус ответа: ' + request.status + ' ' + request.statusText);
       }

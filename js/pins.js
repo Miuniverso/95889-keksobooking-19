@@ -4,6 +4,7 @@
   var WIDTH_PIN = 50;
   var HEIGHT_PIN = 70;
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+  var allPins;
 
   // генерируем клон из шаблона
   function renderPin(pin) {
@@ -20,15 +21,32 @@
   var fragment = document.createDocumentFragment();
 
   // добавляем объявление в разметку
-  function addPinsToDom() {
-    for (var i = 0; i < window.serverRequest.posters.length; i++) {
-      fragment.appendChild(renderPin(window.serverRequest.posters[i]));
+  function addPinsToDom(posters) {
+    for (var i = 0; i < posters.length && i < 5; i++) {
+      fragment.appendChild(renderPin(posters[i]));
     }
     mapPinsWrapper.appendChild(fragment);
   }
 
+  // удаление всех меток на карте
+  function deletePins() {
+    allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    allPins.forEach(function (pin) {
+      pin.remove();
+    });
+  }
+
+  // function updatePins() {
+  //   console.log('Обновила объявления + удалила предыдущие + удалила карточку');
+  //   deletePins();
+  //   window.card.removeCard();
+  //   window.filter.filterByData(window.serverRequest.posters);
+  // }
+
   // Экспорт функций модуля
   window.pins = {
-    addPinsToDom: addPinsToDom
+    addPinsToDom: addPinsToDom,
+    deletePins: deletePins
+    // updatePins: updatePins
   };
 })();

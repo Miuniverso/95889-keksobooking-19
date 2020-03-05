@@ -88,7 +88,15 @@
   var map = document.querySelector('.map');
   var mapFilter = document.querySelector('map__filters-container');
 
-  function addCardToPin() {
+  // удаление карточки
+  function removeCard() {
+    var cardOnMap = map.querySelector('.map__card');
+    if (cardOnMap) {
+      cardOnMap.remove();
+    }
+  }
+
+  function addCardToPin(posters) {
     var cardToPin = document.createDocumentFragment();
     var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
     var newPin;
@@ -106,7 +114,7 @@
       });
     }
 
-    window.serverRequest.posters.forEach(function (pin, index) {
+    posters.forEach(function (pin, index) {
       allPins[index].addEventListener('click', function () {
         // проверка на наличие уже открытых карточек
         var cardOnMap = document.querySelector('.map__card');
@@ -126,6 +134,7 @@
   // Экспорт функций модуля
   window.card = {
     renderCard: renderCard,
-    addCardToPin: addCardToPin
+    addCardToPin: addCardToPin,
+    removeCard: removeCard
   };
 })();
