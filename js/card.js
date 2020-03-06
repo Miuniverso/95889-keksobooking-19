@@ -5,22 +5,26 @@
   var ESC_KEY = 'Escape';
   var cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 
-  var typesOfHouse = [
+  var apartmentsList = [
     {
       type: 'flat',
       translate: 'Квартира',
+      minPrice: 1000
     },
     {
       type: 'bungalo',
       translate: 'Бунгало',
+      minPrice: 0
     },
     {
       type: 'house',
       translate: 'Дом',
+      minPrice: 5000
     },
     {
       type: 'palace',
       translate: 'Дворец',
+      minPrice: 10000
     }
   ];
 
@@ -28,7 +32,7 @@
   function findTypeOfHouse(type) {
     var translate;
 
-    typesOfHouse.forEach(function (element) {
+    apartmentsList.forEach(function (element) {
 
       if (element.type === type) {
         translate = element.translate;
@@ -133,6 +137,7 @@
 
   // Экспорт функций модуля
   window.card = {
+    apartmentsList: apartmentsList,
     renderCard: renderCard,
     addCardToPin: addCardToPin,
     removeCard: removeCard
