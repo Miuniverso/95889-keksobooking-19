@@ -70,11 +70,9 @@
   }
 
   function updateFilter() {
-    // console.log('Обновила объявления + удалила предыдущие + удалила карточку');
     window.pins.deletePins();
     window.card.removeCard();
     var data = filterByData();
-    // filterByData(window.serverRequest.posters);
     window.pins.addPinsToDom(data);
     window.card.addCardToPin(data);
   }
