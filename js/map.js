@@ -54,6 +54,7 @@
 
     addressInput.setAttribute('value', Math.round(leftCoordinate + MainPinCoordinate.width / 2) + ', ' + Math.round(topCoordinate + MainPinCoordinate.height / 2));
 
+
     function onMouseMove(moveEvt) {
       moveEvt.preventDefault();
 
@@ -74,22 +75,23 @@
       mainPin.style.top = changedPinTop + 'px';
       mainPin.style.left = changedPinLeft + 'px';
 
-      switch (changedPinTop) {
-        case changedPinTop > YCoordinate.max:
-          changedPinTop = YCoordinate.max - MainPinCoordinate.tipHeight;
-          break;
-        case changedPinTop < YCoordinate.min:
-          changedPinTop = YCoordinate.min - MainPinCoordinate.tipHeight;
-          break;
+      if (changedPinLeft < 0) {
+        changedPinLeft = 0;
+        mainPin.style.left = '0px';
+      } else if (changedPinLeft > MapCoordinate.width - MainPinCoordinate.width) {
+        mainPin.style.left = MapCoordinate.width - MainPinCoordinate.width + 'px';
+        changedPinLeft = MapCoordinate.width - MainPinCoordinate.width;
       }
 
-      switch (changedPinLeft) {
-        case changedPinLeft > MapCoordinate.width:
-          changedPinTop = MapCoordinate;
-          break;
+      if (changedPinTop < YCoordinate.min) {
+        mainPin.style.top = YCoordinate.min + 'px';
+        changedPinTop = YCoordinate.min;
+      } else if (changedPinTop > YCoordinate.max) {
+        mainPin.style.top = YCoordinate.max + 'px';
+        changedPinTop = YCoordinate.max;
       }
 
-      addressInput.setAttribute('value', String((Math.round(changedPinLeft + (MainPinCoordinate.width / 2)))) + ', ' + String((changedPinTop + MainPinCoordinate.height + MainPinCoordinate.tipHeight)));
+      addressInput.setAttribute('value', String(Math.round(changedPinLeft + (MainPinCoordinate.width / 2))) + ', ' + String(changedPinTop + MainPinCoordinate.height + MainPinCoordinate.tipHeight));
     }
 
     function onMouseUp(upEvt) {
