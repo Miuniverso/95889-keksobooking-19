@@ -29,100 +29,103 @@
   // получение координат и приведение их к числовому формату для последующих изменений
   var leftCoordinate = Number((mainPin.style.left).match(/\d*/));
   var topCoordinate = Number((mainPin.style.top).match(/\d*/));
-  //
-  // var leftCoordinate = document.inactiveMode.leftCoordinate;
-  // var topCoordinate = document.inactiveMode.topCoordinate;
 
-  function onActivePin(evt) {
 
-    evt.preventDefault();
+  // функция активации и перемещения главной метки
+  function onActivePin() {
 
-    var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-    // при наличии уже имеющихся меток новые не отрисовываем
-    if (evt.which === 1) {
-      if (allPins.length !== 0) {
-        return;
-      } else {
-        window.activeMode.changeOnActiveMode();
+    // нажатие левой клавишей мыши
+    mainPin.addEventListener('mousedown', function (evt) {
+
+      evt.preventDefault();
+
+      var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+      // при наличии уже имеющихся меток новые не отрисовываем
+      if (evt.which === 1) {
+        if (allPins.length !== 0) {
+          return;
+        } else {
+          window.activeMode.changeOnActiveMode();
+        }
       }
-    }
 
-    var startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
-    };
-
-    addressInput.setAttribute('value', Math.round(leftCoordinate + MainPinCoordinate.width / 2) + ', ' + Math.round(topCoordinate + MainPinCoordinate.height / 2));
-
-
-    function onMouseMove(moveEvt) {
-      moveEvt.preventDefault();
-
-      // измененные координаты
-      var shift = {
-        x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY
-      };
-      // перезапись изначальных координат
-      startCoords = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY
+      var startCoords = {
+        x: evt.clientX,
+        y: evt.clientY
       };
 
-      var changedPinTop = mainPin.offsetTop - shift.y;
-      var changedPinLeft = mainPin.offsetLeft - shift.x;
+      addressInput.setAttribute('value', Math.round(leftCoordinate + MainPinCoordinate.width / 2) + ', ' + Math.round(topCoordinate + MainPinCoordinate.height / 2));
 
-      mainPin.style.top = changedPinTop + 'px';
-      mainPin.style.left = changedPinLeft + 'px';
+      // перемещаем метку с помощью мыши
+      function onMouseMove(moveEvt) {
+        moveEvt.preventDefault();
 
-      if (changedPinLeft < 0) {
-        changedPinLeft = 0;
-        mainPin.style.left = '0px';
-      } else if (changedPinLeft > MapCoordinate.width - MainPinCoordinate.width) {
-        mainPin.style.left = MapCoordinate.width - MainPinCoordinate.width + 'px';
-        changedPinLeft = MapCoordinate.width - MainPinCoordinate.width;
+        // измененные координаты
+        var shift = {
+          x: startCoords.x - moveEvt.clientX,
+          y: startCoords.y - moveEvt.clientY
+        };
+        // перезапись изначальных координат
+        startCoords = {
+          x: moveEvt.clientX,
+          y: moveEvt.clientY
+        };
+
+        var changedPinTop = mainPin.offsetTop - shift.y;
+        var changedPinLeft = mainPin.offsetLeft - shift.x;
+
+        mainPin.style.top = changedPinTop + 'px';
+        mainPin.style.left = changedPinLeft + 'px';
+
+        if (changedPinLeft < 0) {
+          changedPinLeft = 0;
+          mainPin.style.left = '0px';
+        } else if (changedPinLeft > MapCoordinate.width - MainPinCoordinate.width) {
+          mainPin.style.left = MapCoordinate.width - MainPinCoordinate.width + 'px';
+          changedPinLeft = MapCoordinate.width - MainPinCoordinate.width;
+        }
+
+        if (changedPinTop < YCoordinate.min) {
+          mainPin.style.top = YCoordinate.min + 'px';
+          changedPinTop = YCoordinate.min;
+        } else if (changedPinTop > YCoordinate.max) {
+          mainPin.style.top = YCoordinate.max + 'px';
+          changedPinTop = YCoordinate.max;
+        }
+
+        addressInput.setAttribute('value', String(Math.round(changedPinLeft + (MainPinCoordinate.width / 2))) + ', ' + String(changedPinTop + MainPinCoordinate.height + MainPinCoordinate.tipHeight));
       }
 
-      if (changedPinTop < YCoordinate.min) {
-        mainPin.style.top = YCoordinate.min + 'px';
-        changedPinTop = YCoordinate.min;
-      } else if (changedPinTop > YCoordinate.max) {
-        mainPin.style.top = YCoordinate.max + 'px';
-        changedPinTop = YCoordinate.max;
+      // поднятие клавиши мыши
+      function onMouseUp(upEvt) {
+
+        upEvt.preventDefault();
+
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
       }
 
-      addressInput.setAttribute('value', String(Math.round(changedPinLeft + (MainPinCoordinate.width / 2))) + ', ' + String(changedPinTop + MainPinCoordinate.height + MainPinCoordinate.tipHeight));
-    }
 
-    function onMouseUp(upEvt) {
-
-      upEvt.preventDefault();
-
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-    }
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    });
 
 
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
+    // активация только при нажатии Enter
+    mainPin.addEventListener('keydown', function (evt) {
+
+      var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+
+      if (evt.key === ENTER_KEY) {
+        if (allPins.length !== 0) {
+          return;
+        } else {
+          window.activeMode.changeOnActiveMode();
+        }
+      }
+    });
+
   }
-
-  // активация только при нажатии Enter
-  mainPin.addEventListener('keydown', function (evt) {
-
-    var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-
-    if (evt.key === ENTER_KEY) {
-      if (allPins.length !== 0) {
-        return;
-      } else {
-        window.activeMode.changeOnActiveMode();
-      }
-    }
-  });
-
-  mainPin.addEventListener('mousedown', onActivePin);
-
 
   // Экспорт данных из модуля
   window.serverRequest = {
