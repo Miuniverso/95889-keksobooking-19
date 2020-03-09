@@ -30,12 +30,15 @@
   var leftCoordinate = Number((mainPin.style.left).match(/\d*/));
   var topCoordinate = Number((mainPin.style.top).match(/\d*/));
 
+  var startCoords = {};
+
 
   // функция активации и перемещения главной метки
   function onActivePin() {
 
     // нажатие левой клавишей мыши
     mainPin.addEventListener('mousedown', function (evt) {
+      console.log('Нажатие');
 
       evt.preventDefault();
 
@@ -43,13 +46,15 @@
       // при наличии уже имеющихся меток новые не отрисовываем
       if (evt.which === 1) {
         if (allPins.length !== 0) {
+          console.log('уже есть метки');
+          onMouseMove(evt);
           return;
         } else {
           window.activeMode.changeOnActiveMode();
         }
       }
 
-      var startCoords = {
+      startCoords = {
         x: evt.clientX,
         y: evt.clientY
       };
@@ -58,6 +63,7 @@
 
       // перемещаем метку с помощью мыши
       function onMouseMove(moveEvt) {
+        console.log('Движение');
         moveEvt.preventDefault();
 
         // измененные координаты
@@ -70,6 +76,9 @@
           x: moveEvt.clientX,
           y: moveEvt.clientY
         };
+
+        // для проверки
+        console.log(startCoords.x + ' ' + startCoords.y);
 
         var changedPinTop = mainPin.offsetTop - shift.y;
         var changedPinLeft = mainPin.offsetLeft - shift.x;
@@ -127,8 +136,10 @@
 
   }
 
+  onActivePin();
+
   // Экспорт данных из модуля
-  window.serverRequest = {
+  window.map = {
     onActivePin: onActivePin
   };
 })();

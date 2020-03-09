@@ -58,7 +58,6 @@
     window.inactiveMode.notDisabledAllFildset();
     // changeСoordinates();
     window.serverRequest.onSuccesLoad('https://js.dump.academy/keksobooking/data', window.filter.filterByData, showErrorMessage);
-    window.map.onActivePin();
   }
 
   // Экспорт функций модуля
