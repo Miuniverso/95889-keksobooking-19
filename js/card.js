@@ -101,6 +101,7 @@
   }
 
   function addCardToPin(posters) {
+    console.log('Начало card');
     var cardToPin = document.createDocumentFragment();
     var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
     var newPin;
@@ -126,6 +127,7 @@
         if (cardOnMap) {
           cardOnMap.remove();
         }
+        console.log('Добавляю card');
         newPin = cardToPin.appendChild(renderCard(pin));
         btnClose = newPin.querySelector('.popup__close');
         map.insertBefore(newPin, mapFilter);
