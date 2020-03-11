@@ -66,7 +66,7 @@
   // вкл Активное состояние
   function changeOnActiveMode() {
     // если страницы не активна
-    if (isActivePage === false) {
+    if (!isActivePage) {
       document.querySelector('.map').classList.remove('map--faded');
       document.querySelector('.ad-form').classList.remove('ad-form--disabled');
       window.inactiveMode.notDisabledAllFildset();
@@ -79,10 +79,6 @@
       window.map.onActivePin();
       isActivePage = true;
       return;
-    } else {
-      document.inactiveMode.disabledAllFildset();
-      document.pin.deletePins();
-      isActivePage = false;
     }
   }
 
@@ -98,6 +94,8 @@
   window.activeMode = {
     changeOnActiveMode: changeOnActiveMode,
     mainPin: mainPin,
+    MAIN_PIN_WIDTH: MAIN_PIN_WIDTH,
+    MAIN_PIN_HEIGHT: MAIN_PIN_HEIGHT,
     MAIN_PIN_POINTER_WIDTH: MAIN_PIN_POINTER_WIDTH,
     MAIN_PIN_POINTER_HEIGHT: MAIN_PIN_POINTER_HEIGHT,
     addressInput: addressInput,
