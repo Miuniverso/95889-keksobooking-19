@@ -34,6 +34,7 @@
   // Экспорт данных модуля
   window.inactiveMode = {
     notDisabledAllFildset: notDisabledAllFildset,
+    disabledAllFildset: disabledAllFildset,
     mainPin: mainPin,
     addressInput: addressInput,
     leftCoordinate: leftCoordinate,
