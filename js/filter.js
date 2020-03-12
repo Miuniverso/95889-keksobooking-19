@@ -69,12 +69,13 @@
     return filterPosters;
   }
 
+  // боль начиинается где-то здесь, как я поняла
   function updateFilter() {
     window.pins.deletePins();
     window.card.removeCard();
-    var data = filterByData();
-    window.pins.addPinsToDom(data);
-    window.card.addCardToPin(data);
+    filterByData();
+    // window.pins.addPinsToDom(data);
+    // window.card.addCardToPin(data);
   }
 
   allFilters.addEventListener('change', updateFilter);

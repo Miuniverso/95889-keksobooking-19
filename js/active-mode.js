@@ -26,25 +26,6 @@
     addressInput.value = left + ', ' + top;
   };
 
-  // function changeСoordinates() {
-  //   addressInput.setAttribute('value', String((leftCoordinate + Math.round(MAIN_PIN_POINTER_WIDTH / 2))) + ', ' + String((topCoordinate + Math.round(MAIN_PIN_POINTER_HEIGHT))));
-  //   return addressInput.value;
-  // }
-
-  // получение и рендер данных с сервера
-  // function getAndRenderData(dataFromServer) {
-  //
-  //   var allData = JSON.parse(dataFromServer);
-  //
-  //   allData.forEach(function (data) {
-  //     window.serverRequest.posters.push(data);
-  //   });
-  //   var data = window.filter.filterByData(window.serverRequest.posters);
-  //   // window.filter.filterByData(window.serverRequest.posters);
-  //   window.pins.addPinsToDom(data);
-  //   window.card.addCardToPin(data);
-  // }
-
   // закрытие окна с ошибкой
   function closeError() {
     main.removeChild(document.querySelector('.error'));
@@ -65,6 +46,7 @@
 
   // вкл Активное состояние
   function changeOnActiveMode() {
+    console.log(isActivePage);
     // если страницы не активна
     if (!isActivePage) {
       document.querySelector('.map').classList.remove('map--faded');
@@ -99,6 +81,7 @@
     MAIN_PIN_POINTER_WIDTH: MAIN_PIN_POINTER_WIDTH,
     MAIN_PIN_POINTER_HEIGHT: MAIN_PIN_POINTER_HEIGHT,
     addressInput: addressInput,
-    changeAddressValue: changeAddressValue
+    changeAddressValue: changeAddressValue,
+    isActivePage: isActivePage
   };
 })();

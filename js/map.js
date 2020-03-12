@@ -98,6 +98,8 @@
 
   // Экспорт данных из модуля
   window.map = {
-    onActivePin: onActivePin
+    onActivePin: onActivePin,
+    MainPinCoordinate: MainPinCoordinate,
+    mainPin: mainPin
   };
 })();
