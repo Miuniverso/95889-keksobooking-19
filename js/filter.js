@@ -37,12 +37,15 @@
 
   function filterByData() {
 
+    console.log('Filter');
+
     var filterSelectList = document.querySelector('.map__filters').querySelectorAll('select');
     // var featuresList = document.querySelector('#housing-features').querySelectorAll('input');
 
     filterSelectList = Array.from(filterSelectList).filter(function (item) {
       return item.value !== 'any';
     });
+
 
     filterPosters = window.serverRequest.posters;
 

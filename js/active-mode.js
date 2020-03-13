@@ -97,9 +97,10 @@
 
       changeAddressValue(mainPinLeft, mainPinTop);
 
-      window.serverRequest.onSuccesLoad('https://js.dump.academy/keksobooking/data', window.filter.filterByData, showErrorMessage);
+      window.serverRequest.loadData(window.filter.filterByData, showErrorMessage);
       window.map.onActivePin();
       window.activeMode.isActivePage = true;
+      // window.serverRequest.onSuccesLoad('https://js.dump.academy/keksobooking', showSuccessMessage, showErrorMessage);
       return;
     }
   }
@@ -124,6 +125,7 @@
     changeAddressValue: changeAddressValue,
     isActivePage: isActivePage,
     onDisable: onDisable,
-    changeCursor: changeCursor
+    changeCursor: changeCursor,
+    showErrorMessage: showErrorMessage
   };
 })();
