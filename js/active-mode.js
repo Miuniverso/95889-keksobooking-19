@@ -6,14 +6,16 @@
   var MAIN_PIN_POINTER_WIDTH = 22;
   var MAIN_PIN_WIDTH = 65;
   var MAIN_PIN_HEIGHT = 65;
+  var addFormButton = document.querySelector('.ad-form__submit');
+  var resetFormButton = document.querySelector('.ad-form__reset');
   // var ENTER_KEY = 'Enter';
+  var ESCAPE_KAY = 'Escape';
 
   // Импорт данных из других модулей
   var addressInput = window.inactiveMode.addressInput;
-  // var leftCoordinate = window.inactiveMode.leftCoordinate;
-  // var topCoordinate = window.inactiveMode.topCoordinate;
   var mainPin = window.inactiveMode.mainPin;
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
+  var successTemplate = document.querySelector('#success').content.querySelector('.success');
   var main = document.querySelector('main');
 
   var mainPinLeft = parseInt(mainPin.style.left, 10);
@@ -27,8 +29,12 @@
   };
 
   // закрытие окна с ошибкой
-  function closeError() {
-    main.removeChild(document.querySelector('.error'));
+  // function closeError() {
+  //   main.removeChild(document.querySelector('.error'));
+  // }
+
+  function closeMessage(msg) {
+    main.removeChild(document.querySelector(msg));
   }
 
   // появление окна с ошибкой
@@ -40,18 +46,52 @@
     errorClone.querySelector('.error__message').innerHTML = msg;
     fragment.appendChild(errorClone);
     main.appendChild(fragment);
-    // Закрытие окна с ошибкой
-    window.addEventListener('click', closeError);
+    // Закрытие окна
+    // window.addEventListener('click', closeError);
+    window.addEventListener('click', closeMessage('.error'));
+  }
+
+  // появление "успешного окна"
+  function showSuccessMessage() {
+    var successClone = successTemplate.cloneNode(true);
+    var fragment = document.createDocumentFragment();
+
+    fragment.appendChild(successClone);
+    main.appendChild(fragment);
+    // Закрытие окна
+    window.addEventListener('click', closeMessage('.success'));
+    window.addEventListener('keydown', function (evt) {
+      if (evt.key === ESCAPE_KAY) {
+        closeMessage('.success');
+      }
+    });
+  }
+
+  function onDisable(list, value) {
+    list.forEach(function (item) {
+      item.disabled = value;
+    });
+  }
+
+  function changeCursor(list, cursor) {
+    list.forEach(function (item) {
+      item.style.cursor = cursor;
+    });
   }
 
   // вкл Активное состояние
   function changeOnActiveMode() {
-    console.log(isActivePage);
     // если страницы не активна
-    if (!isActivePage) {
+    if (!window.activeMode.isActivePage) {
       document.querySelector('.map').classList.remove('map--faded');
       document.querySelector('.ad-form').classList.remove('ad-form--disabled');
       window.inactiveMode.notDisabledAllFildset();
+      onDisable(document.querySelectorAll('.map__filter'), false);
+      onDisable(document.querySelectorAll('.map__checkbox'), false);
+      changeCursor(document.querySelectorAll('.map__filter'), 'pointer');
+      changeCursor(document.querySelectorAll('.map__feature'), 'pointer');
+      addFormButton.disabled = false;
+      resetFormButton.disabled = false;
       mainPinLeft = Math.round(parseInt(mainPin.style.left, 10) + (MAIN_PIN_WIDTH / 2));
       mainPinTop = Math.round(parseInt(mainPin.style.top, 10) + MAIN_PIN_HEIGHT + MAIN_PIN_POINTER_HEIGHT);
 
@@ -59,7 +99,7 @@
 
       window.serverRequest.onSuccesLoad('https://js.dump.academy/keksobooking/data', window.filter.filterByData, showErrorMessage);
       window.map.onActivePin();
-      isActivePage = true;
+      window.activeMode.isActivePage = true;
       return;
     }
   }
@@ -82,6 +122,8 @@
     MAIN_PIN_POINTER_HEIGHT: MAIN_PIN_POINTER_HEIGHT,
     addressInput: addressInput,
     changeAddressValue: changeAddressValue,
-    isActivePage: isActivePage
+    isActivePage: isActivePage,
+    onDisable: onDisable,
+    changeCursor: changeCursor
   };
 })();

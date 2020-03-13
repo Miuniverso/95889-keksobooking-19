@@ -60,18 +60,6 @@
     }
   }
 
-  function onDisable(list, value) {
-    list.forEach(function (item) {
-      item.disabled = value;
-    });
-  }
-
-  function changeCursor(list, cursor) {
-    list.forEach(function (item) {
-      item.style.cursor = cursor;
-    });
-  }
-
   function onResetForm() {
     form.reset();
     filter.reset();
@@ -81,19 +69,22 @@
     window.map.mainPin.style.left = defaultCoords.x + 'px';
     window.map.mainPin.style.top = defaultCoords.y + 'px';
     form.classList.add('ad-form--disabled');
+    onBlockPage();
+  }
+
+  function onBlockPage() {
     filter.disabled = true;
     map.classList.add('map--faded');
-    onDisable(document.querySelectorAll('.map__filter'), true);
-    onDisable(document.querySelectorAll('.map__checkbox'), true);
-    changeCursor(document.querySelectorAll('.map__filter'), 'default');
-    changeCursor(document.querySelectorAll('.map__feature'), 'default');
+    window.activeMode.onDisable(document.querySelectorAll('.map__filter'), true);
+    window.activeMode.onDisable(document.querySelectorAll('.map__checkbox'), true);
+    window.activeMode.changeCursor(document.querySelectorAll('.map__filter'), 'default');
+    window.activeMode.changeCursor(document.querySelectorAll('.map__feature'), 'default');
     addFormButton.disabled = true;
     resetFormButton.disabled = true;
     window.activeMode.isActivePage = false;
-
-    console.log(window.activeMode.isActivePage);
-
   }
+
+  onBlockPage();
 
   selectRoom.addEventListener('change', onSelectRoom);
   selectType.addEventListener('change', onSelectType);
@@ -101,4 +92,5 @@
     time.addEventListener('change', onSelectTime);
   });
   resetFormButton.addEventListener('click', onResetForm);
+
 })();
