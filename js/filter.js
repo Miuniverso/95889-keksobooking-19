@@ -37,8 +37,6 @@
 
   function filterByData() {
 
-    console.log('Filter');
-
     var filterSelectList = document.querySelector('.map__filters').querySelectorAll('select');
     // var featuresList = document.querySelector('#housing-features').querySelectorAll('input');
 
@@ -72,13 +70,10 @@
     return filterPosters;
   }
 
-  // боль начиинается где-то здесь, как я поняла
   function updateFilter() {
     window.pins.deletePins();
     window.card.removeCard();
     filterByData();
-    // window.pins.addPinsToDom(data);
-    // window.card.addCardToPin(data);
   }
 
   allFilters.addEventListener('change', updateFilter);

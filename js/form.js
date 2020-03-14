@@ -60,23 +60,17 @@
     }
   }
 
-  function onResetForm() {
+  function onBlockPage() {
     form.reset();
     filter.reset();
-    // window.pins.deletePins();
-    // window.card.removeCard();
+    filter.disabled = true;
+    map.classList.add('map--faded');
+    form.classList.add('ad-form--disabled');
+    window.pins.deletePins();
+    window.card.removeCard();
     window.inactiveMode.disabledAllFildset();
     window.map.mainPin.style.left = defaultCoords.x + 'px';
     window.map.mainPin.style.top = defaultCoords.y + 'px';
-    form.classList.add('ad-form--disabled');
-    onBlockPage();
-  }
-
-  function onBlockPage() {
-    filter.disabled = true;
-    map.classList.add('map--faded');
-    window.pins.deletePins();
-    window.card.removeCard();
     window.activeMode.onDisable(document.querySelectorAll('.map__filter'), true);
     window.activeMode.onDisable(document.querySelectorAll('.map__checkbox'), true);
     window.activeMode.changeCursor(document.querySelectorAll('.map__filter'), 'default');
@@ -89,11 +83,10 @@
   onBlockPage();
 
   function submitDataToServer(evt) {
-    console.log('Отправка данных на сервер')
+    console.log('Отправка данных на сервер');
     evt.preventDefault();
     window.serverRequest.postData(new FormData(form), window.activeMode.showSuccessMessage, window.activeMode.showErrorMessage);
     onBlockPage();
-    form.reset();
   }
 
   selectRoom.addEventListener('change', onSelectRoom);
@@ -101,7 +94,7 @@
   selectTime.forEach(function (time) {
     time.addEventListener('change', onSelectTime);
   });
-  resetFormButton.addEventListener('click', onResetForm);
+  resetFormButton.addEventListener('click', onBlockPage);
   form.addEventListener('submit', submitDataToServer);
 
 })();

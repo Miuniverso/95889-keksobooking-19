@@ -8,10 +8,7 @@
     post: 'https://js.dump.academy/keksobooking'
   };
 
-  // var URL_GET = 'https://js.dump.academy/keksobooking/data';
-  // var URL_POST = 'https://js.dump.academy/keksobooking';
-
-  function makeRequest(url, onSuccess, onError) {
+  function makeRequest(onSuccess, onError) {
     var request = new XMLHttpRequest();
 
     request.addEventListener('load', function () {
@@ -25,23 +22,11 @@
           allData.forEach(function (data) {
             window.serverRequest.posters.push(data);
           });
-          console.log('posters: ' + posters);
-
           onSuccess(posters);
-
-          console.log('Успешно');
         } else {
           console.log('Else');
-          onSuccess(request.responseText);
+          onSuccess();
         }
-
-        // var allData = JSON.parse(request.responseText);
-        //
-        // allData.forEach(function (data) {
-        //   window.serverRequest.posters.push(data);
-        // });
-        //
-        // onSuccess(posters);
       } else {
         onError('Cтатус ответа: ' + request.status + ' ' + request.statusText);
       }
@@ -57,22 +42,17 @@
 
     request.timeout = 10000; // 10s
     return request;
-
-    // request.open('GET', url, true);
-    // request.send();
   }
 
   function loadData(onSuccess, onError) {
-    console.log('LOAD DATA');
     var request = makeRequest(onSuccess, onError);
     request.open('GET', Url.get, true);
     request.send();
   }
 
   function postData(data, onSuccess, onError) {
-    console.log('POST DATA');
     var request = makeRequest(onSuccess, onError);
-    request.open('POST', Url.post, true);
+    request.open('POST', Url.post);
     request.send(data);
   }
 
