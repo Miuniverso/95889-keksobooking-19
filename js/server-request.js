@@ -8,25 +8,19 @@
     post: 'https://js.dump.academy/keksobooking'
   };
 
-  function makeRequest(onSuccess, onError) {
+  var TIMEOUT = 10000;
+
+  function makeRequest(url, method, data, onSuccess, onError) {
     var request = new XMLHttpRequest();
 
     request.addEventListener('load', function () {
       if (request.status === 200) {
-        console.log('status 200');
+        var allData = JSON.parse(request.responseText);
 
-        if (typeof (request.responseText) === 'string') {
-          console.log('String');
-          var allData = JSON.parse(request.responseText);
-
-          allData.forEach(function (data) {
-            window.serverRequest.posters.push(data);
-          });
-          onSuccess(posters);
-        } else {
-          console.log('Else');
-          onSuccess();
-        }
+        allData.forEach(function (poster) {
+          window.serverRequest.posters.push(poster);
+        });
+        onSuccess(posters);
       } else {
         onError('Cтатус ответа: ' + request.status + ' ' + request.statusText);
       }
@@ -40,20 +34,19 @@
       onError('Запрос не успел выполниться за ' + request.timeout + 'мс');
     });
 
-    request.timeout = 10000; // 10s
-    return request;
+    request.timeout = TIMEOUT; // 10s
+
+    request.open(method, url);
+    var params = data ? new FormData(data) : data;
+    request.send(params);
   }
 
   function loadData(onSuccess, onError) {
-    var request = makeRequest(onSuccess, onError);
-    request.open('GET', Url.get, true);
-    request.send();
+    makeRequest(Url.get, 'GET', false, onSuccess, onError);
   }
 
   function postData(data, onSuccess, onError) {
-    var request = makeRequest(onSuccess, onError);
-    request.open('POST', Url.post);
-    request.send(data);
+    makeRequest(Url.post, 'POST', data, onSuccess, onError);
   }
 
   // Экспорт данных из модуля
