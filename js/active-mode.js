@@ -28,26 +28,21 @@
     addressInput.value = left + ', ' + top;
   };
 
-  // закрытие окна с ошибкой
-  // function closeError() {
-  //   main.removeChild(document.querySelector('.error'));
-  // }
-
   function closeMessage(msg) {
     main.removeChild(document.querySelector(msg));
   }
 
   // появление окна с ошибкой
   function showErrorMessage(msg) {
+    console.log('Show Error Message');
 
     var errorClone = errorTemplate.cloneNode(true);
     var fragment = document.createDocumentFragment();
 
     errorClone.querySelector('.error__message').innerHTML = msg;
+    console.log(errorClone);
     fragment.appendChild(errorClone);
     main.appendChild(fragment);
-    // Закрытие окна
-    // window.addEventListener('click', closeError);
     window.addEventListener('click', closeMessage('.error'));
   }
 
@@ -100,6 +95,7 @@
       window.serverRequest.loadData(window.filter.filterByData, showErrorMessage);
       window.map.onActivePin();
       window.activeMode.isActivePage = true;
+      window.form.onSelectRoom();
       // window.serverRequest.onSuccesLoad('https://js.dump.academy/keksobooking', showSuccessMessage, showErrorMessage);
       return;
     }
@@ -126,6 +122,7 @@
     isActivePage: isActivePage,
     onDisable: onDisable,
     changeCursor: changeCursor,
-    showErrorMessage: showErrorMessage
+    showErrorMessage: showErrorMessage,
+    showSuccessMessage: showSuccessMessage
   };
 })();

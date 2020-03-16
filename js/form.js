@@ -22,8 +22,11 @@
 
   // выбор комнаты и блокировка неподходящих значений количества гостей
   function onSelectRoom(evt) {
-
-    var count = evt.target.value;
+    if (evt) {
+      var count = evt.target.value;
+    } else {
+      count = (selectRoom.querySelector('option[selected]')).value;
+    }
 
     selectGuests.forEach(function (option) {
       option.remove();
@@ -96,5 +99,10 @@
   });
   resetFormButton.addEventListener('click', onBlockPage);
   form.addEventListener('submit', submitDataToServer);
+
+  // Экспорт функций модуля
+  window.form = {
+    onSelectRoom: onSelectRoom
+  };
 
 })();

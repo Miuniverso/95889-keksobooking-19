@@ -1,58 +1,57 @@
 'use strict';
 
 (function () {
-  var posters = [];
-
   var Url = {
-    get: 'https://js.dump.academy/keksobooking/data',
+    get: 'https://js.dump.academy/keksoboking/data',
     post: 'https://js.dump.academy/keksobooking'
   };
 
   var TIMEOUT = 10000;
+  var METHOD_LOAD = 'GET';
+  var METHOD_SAVE = 'POST';
+  var SUCCESS_CODE = 200;
 
-  function makeRequest(url, method, data, onSuccess, onError) {
-    var request = new XMLHttpRequest();
+  var sendXMLHttpRequest = function (url, method, data, loadHandler, errorHandler) {
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
 
-    request.addEventListener('load', function () {
-      if (request.status === 200) {
-        var allData = JSON.parse(request.responseText);
-
-        allData.forEach(function (poster) {
-          window.serverRequest.posters.push(poster);
-        });
-        onSuccess(posters);
+    xhr.addEventListener('load', function () {
+      if (xhr.status === SUCCESS_CODE) {
+        loadHandler(xhr.response);
       } else {
-        onError('Cтатус ответа: ' + request.status + ' ' + request.statusText);
+        console.log('ОШИБКА');
+        errorHandler('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }
     });
 
-    request.addEventListener('error', function () {
-      onError('Произошла ошибка соединения');
+    xhr.addEventListener('error', function () {
+      errorHandler('Произошла ошибка соединения');
     });
 
-    request.addEventListener('timeout', function () {
-      onError('Запрос не успел выполниться за ' + request.timeout + 'мс');
+    xhr.addEventListener('timeout', function () {
+      errorHandler('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    request.timeout = TIMEOUT; // 10s
+    xhr.timeout = TIMEOUT;
+    xhr.open(method, url);
+    var params = data ? data : new FormData();
+    xhr.send(params);
+  };
 
-    request.open(method, url);
-    var params = data ? new FormData(data) : data;
-    request.send(params);
+  function loadData(loadHandler, errorHandler) {
+    console.log('Load');
+
+    sendXMLHttpRequest(Url.get, METHOD_LOAD, false, loadHandler, errorHandler);
   }
 
-  function loadData(onSuccess, onError) {
-    makeRequest(Url.get, 'GET', false, onSuccess, onError);
-  }
+  function postData(data, loadHandler, errorHandler) {
+    console.log(loadHandler);
 
-  function postData(data, onSuccess, onError) {
-    makeRequest(Url.post, 'POST', data, onSuccess, onError);
+    sendXMLHttpRequest(Url.post, METHOD_SAVE, data, loadHandler, errorHandler);
   }
 
   // Экспорт данных из модуля
   window.serverRequest = {
-    makeRequest: makeRequest,
-    posters: posters,
     loadData: loadData,
     postData: postData
   };
