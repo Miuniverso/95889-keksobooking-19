@@ -1,43 +1,53 @@
 'use strict';
 
 (function () {
-  var posters = [];
+  var Url = {
+    get: 'https://js.dump.academy/keksobooking/data',
+    post: 'https://js.dump.academy/keksobooking'
+  };
 
-  function onSuccesLoad(url, onSuccess, onError) {
-    var request = new XMLHttpRequest();
+  var TIMEOUT = 10000;
+  var METHOD_LOAD = 'GET';
+  var METHOD_SAVE = 'POST';
+  var SUCCESS_CODE = 200;
 
-    request.addEventListener('load', function () {
-      if (request.status === 200) {
+  var sendXMLHttpRequest = function (url, method, data, loadHandler, errorHandler) {
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
 
-        var allData = JSON.parse(request.responseText);
-
-        allData.forEach(function (data) {
-          window.serverRequest.posters.push(data);
-        });
-
-        onSuccess(posters);
+    xhr.addEventListener('load', function () {
+      if (xhr.status === SUCCESS_CODE) {
+        loadHandler(xhr.response);
       } else {
-        onError('Cтатус ответа: ' + request.status + ' ' + request.statusText);
+        errorHandler('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }
     });
 
-    request.addEventListener('error', function () {
-      onError('Произошла ошибка соединения');
+    xhr.addEventListener('error', function () {
+      errorHandler('Произошла ошибка соединения');
     });
 
-    request.addEventListener('timeout', function () {
-      onError('Запрос не успел выполниться за ' + request.timeout + 'мс');
+    xhr.addEventListener('timeout', function () {
+      errorHandler('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    request.timeout = 10000; // 10s
+    xhr.timeout = TIMEOUT;
+    xhr.open(method, url);
+    var params = data ? data : new FormData();
+    xhr.send(params);
+  };
 
-    request.open('GET', url, true);
-    request.send();
+  function loadData(loadHandler, errorHandler) {
+    sendXMLHttpRequest(Url.get, METHOD_LOAD, false, loadHandler, errorHandler);
+  }
+
+  function postData(data, loadHandler, errorHandler) {
+    sendXMLHttpRequest(Url.post, METHOD_SAVE, data, loadHandler, errorHandler);
   }
 
   // Экспорт данных из модуля
   window.serverRequest = {
-    onSuccesLoad: onSuccesLoad,
-    posters: posters
+    loadData: loadData,
+    postData: postData
   };
 })();
