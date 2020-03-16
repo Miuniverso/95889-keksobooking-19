@@ -2,7 +2,7 @@
 
 (function () {
   var Url = {
-    get: 'https://js.dump.academy/keksoboking/data',
+    get: 'https://js.dump.academy/keksobooking/data',
     post: 'https://js.dump.academy/keksobooking'
   };
 

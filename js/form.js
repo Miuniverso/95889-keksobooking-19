@@ -86,7 +86,6 @@
   onBlockPage();
 
   function submitDataToServer(evt) {
-    console.log('Отправка данных на сервер');
     evt.preventDefault();
     window.serverRequest.postData(new FormData(form), window.activeMode.showSuccessMessage, window.activeMode.showErrorMessage);
     onBlockPage();
