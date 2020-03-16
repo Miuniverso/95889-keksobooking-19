@@ -29,21 +29,31 @@
   };
 
   function closeMessage(msg) {
-    main.removeChild(document.querySelector(msg));
+    document.addEventListener('click', function (evt) {
+
+      if (evt.target !== document.querySelector(msg + '__message')) {
+        document.querySelector(msg).remove();
+      }
+    });
+
+    window.addEventListener('keydown', function (evt) {
+      if (evt.key === ESCAPE_KAY) {
+        document.querySelector(msg).remove();
+      }
+    });
   }
 
   // появление окна с ошибкой
   function showErrorMessage(msg) {
-    console.log('Show Error Message');
-
     var errorClone = errorTemplate.cloneNode(true);
     var fragment = document.createDocumentFragment();
 
     errorClone.querySelector('.error__message').innerHTML = msg;
-    console.log(errorClone);
     fragment.appendChild(errorClone);
     main.appendChild(fragment);
-    window.addEventListener('click', closeMessage('.error'));
+
+
+    setTimeout(document.addEventListener('click', closeMessage('.error')), 2000);
   }
 
   // появление "успешного окна"
@@ -54,8 +64,9 @@
     fragment.appendChild(successClone);
     main.appendChild(fragment);
     // Закрытие окна
-    window.addEventListener('click', closeMessage('.success'));
-    window.addEventListener('keydown', function (evt) {
+    document.querySelector('.success').addEventListener('click', closeMessage('.success'));
+    // window.addEventListener('click', closeMessage('.success'));
+    document.addEventListener('keydown', function (evt) {
       if (evt.key === ESCAPE_KAY) {
         closeMessage('.success');
       }

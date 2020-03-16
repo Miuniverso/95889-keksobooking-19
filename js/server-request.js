@@ -19,7 +19,6 @@
       if (xhr.status === SUCCESS_CODE) {
         loadHandler(xhr.response);
       } else {
-        console.log('ОШИБКА');
         errorHandler('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }
     });
@@ -39,14 +38,10 @@
   };
 
   function loadData(loadHandler, errorHandler) {
-    console.log('Load');
-
     sendXMLHttpRequest(Url.get, METHOD_LOAD, false, loadHandler, errorHandler);
   }
 
   function postData(data, loadHandler, errorHandler) {
-    console.log(loadHandler);
-
     sendXMLHttpRequest(Url.post, METHOD_SAVE, data, loadHandler, errorHandler);
   }
 
