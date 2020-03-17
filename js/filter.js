@@ -35,10 +35,16 @@
     });
   }
 
+  function filterByFeatures(dataList, checkValue) {
+    return dataList.filter(function (data) {
+      return data.offer.features.includes(checkValue);
+    });
+  }
+
   function filterByData(data) {
 
     var filterSelectList = document.querySelector('.map__filters').querySelectorAll('select');
-    // var featuresList = document.querySelector('#housing-features').querySelectorAll('input');
+    var featuresList = document.querySelector('#housing-features').querySelectorAll('input[type="checkbox"]:checked');
 
     filterSelectList = Array.from(filterSelectList).filter(function (item) {
       return item.value !== 'any';
@@ -64,6 +70,11 @@
       }
     });
 
+    featuresList.forEach(function (feature) {
+      newFilterList = filterByFeatures(newFilterList, feature.value);
+    });
+
+
     window.pins.addPinsToDom(newFilterList.slice(0, 5));
     window.card.addCardToPin(newFilterList.slice(0, 5));
 
@@ -76,7 +87,9 @@
     filterByData(filterPosters);
   }
 
-  allFilters.addEventListener('change', updateFilter);
+  var updateFillterHandler = window.optimization.debaunce(updateFilter);
+
+  allFilters.addEventListener('change', updateFillterHandler);
 
 
   // Экспорт функций модуля
