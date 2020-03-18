@@ -20,7 +20,12 @@
     max: 630
   };
 
-  var mainPin = document.querySelector('.map__pin--main');
+  var XCoordinate = {
+    min: -(window.activeMode.MAIN_PIN_WIDTH / 2),
+    max: MapCoordinate.width + (window.activeMode.MAIN_PIN_WIDTH / 2)
+  };
+
+  var mainPin = window.inactiveMode.mainPin;
 
   function onActivePin() {
     // нажатие кнопки мыши
@@ -55,12 +60,12 @@
         mainPin.style.top = mainPin.offsetTop - shift.y + 'px';
         mainPin.style.left = mainPin.offsetLeft - shift.x + 'px';
 
-        if (parseInt(target.style.left, 10) < 0) {
-          target.style.left = '0px';
-          mainPin.style.left = 0;
-        } else if (parseInt(target.style.left, 10) > MapCoordinate.width - window.activeMode.MAIN_PIN_WIDTH) {
-          target.style.left = MapCoordinate.width - window.activeMode.MAIN_PIN_WIDTH + 'px';
-          mainPin.style.left = MapCoordinate.width - window.activeMode.MAIN_PIN_WIDTH;
+        if (parseInt(target.style.left, 10) < XCoordinate.min) {
+          target.style.left = XCoordinate.min + 'px';
+          mainPin.style.left = XCoordinate.min;
+        } else if (parseInt(target.style.left, 10) > XCoordinate.max) {
+          target.style.left = XCoordinate.max + 'px';
+          mainPin.style.left = XCoordinate.max;
         }
 
         if (parseInt(target.style.top, 10) < YCoordinate.min) {
@@ -74,15 +79,15 @@
         window.activeMode.changeAddressValue(Math.round(parseInt(target.style.left, 10) + (MainPinCoordinate.width / 2)), parseInt(target.style.top, 10) + MainPinCoordinate.height + MainPinCoordinate.tipHeight);
       }
 
-      function onMouseUp(upEvt) {
-        upEvt.preventDefault();
+      function onMouseUp(mouseUpEvt) {
+        mouseUpEvt.preventDefault();
 
         document.removeEventListener('mousemove', onMouseMove);
         document.removeEventListener('mouseup', onMouseUp);
 
         if (dragged) {
-          var onClickPreventDefault = function (drEvt) {
-            drEvt.preventDefault();
+          var onClickPreventDefault = function (dragEvt) {
+            dragEvt.preventDefault();
             mainPin.removeEventListener('click', onClickPreventDefault);
           };
           mainPin.addEventListener('click', onClickPreventDefault);
@@ -99,6 +104,5 @@
   window.map = {
     onActivePin: onActivePin,
     MainPinCoordinate: MainPinCoordinate,
-    mainPin: mainPin
   };
 })();

@@ -28,16 +28,20 @@
     }
   ];
 
+  var photoParameters = {
+    width: 45,
+    height: 40
+  };
+
   // поиск нужного типа аппартаментов
   function findTypeOfHouse(type) {
     var translate;
 
-    apartmentsList.forEach(function (element) {
-
-      if (element.type === type) {
-        translate = element.translate;
+    for (var i = 0; i < apartmentsList.length; i++) {
+      if (apartmentsList[i].type === type) {
+        translate = apartmentsList[i].translate;
       }
-    });
+    }
     return translate;
   }
 
@@ -62,8 +66,8 @@
       var featureElement = document.createElement('img');
       featureElement.classList.add('popup__photo');
       featureElement.src = array[i];
-      featureElement.width = 45;
-      featureElement.height = 40;
+      featureElement.width = photoParameters.width;
+      featureElement.height = photoParameters.height;
       newFragment.appendChild(featureElement);
     }
     return newFragment;
@@ -97,6 +101,8 @@
     var cardOnMap = map.querySelector('.map__card');
     if (cardOnMap) {
       cardOnMap.remove();
+      var activePin = document.querySelector('.map__pin--active');
+      activePin.classList.remove('map__pin--active');
     }
   }
 
@@ -105,15 +111,18 @@
     var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
     var newPin;
     var btnClose;
+    var activePin;
 
     function cardCloseEvents() {
       btnClose.addEventListener('click', function () {
         newPin.remove();
+        activePin.classList.remove('map__pin--active');
       });
 
       document.addEventListener('keydown', function (evt) {
         if (evt.key === ESC_KEY) {
           newPin.remove();
+          activePin.classList.remove('map__pin--active');
         }
       });
     }
@@ -122,10 +131,15 @@
       allPins[index].addEventListener('click', function () {
         // проверка на наличие уже открытых карточек
         var cardOnMap = document.querySelector('.map__card');
+        activePin = document.querySelector('.map__pin--active');
 
         if (cardOnMap) {
           cardOnMap.remove();
+          activePin.classList.remove('map__pin--active');
         }
+
+        allPins[index].classList.add('map__pin--active');
+
         newPin = cardToPin.appendChild(renderCard(pin));
         btnClose = newPin.querySelector('.popup__close');
         map.insertBefore(newPin, mapFilter);
@@ -138,8 +152,7 @@
   // Экспорт функций модуля
   window.card = {
     apartmentsList: apartmentsList,
-    renderCard: renderCard,
-    addCardToPin: addCardToPin,
-    removeCard: removeCard
+    addToPin: addCardToPin,
+    remove: removeCard
   };
 })();

@@ -8,6 +8,12 @@
   var selectPrice = document.querySelector('#price');
 
   var selectTime = document.querySelector('.ad-form__element--time').querySelectorAll('select');
+
+  var typesOfTime = {
+    timein: document.querySelector('#timein'),
+    timeout: document.querySelector('#timeout')
+  };
+
   var form = document.querySelector('.ad-form');
   var map = document.querySelector('.map');
   var filter = document.querySelector('.map__filters');
@@ -19,6 +25,7 @@
     y: 375
   };
 
+  var inputs = form.querySelectorAll('input');
 
   // выбор комнаты и блокировка неподходящих значений количества гостей
   function onSelectRoom(evt) {
@@ -44,21 +51,27 @@
   }
 
   function onSelectType(evt) {
-    window.card.apartmentsList.forEach(function (apartment) {
-      if (apartment.type === evt.target.value) {
-        selectPrice.setAttribute('min', apartment.minPrice);
-        selectPrice.setAttribute('placeholder', apartment.minPrice);
+    if (evt) {
+      var type = evt.target.value;
+    } else {
+      type = (selectType.querySelector('option[selected]')).value;
+    }
+
+    for (var i = 0; i < window.card.apartmentsList.length; i++) {
+      if (window.card.apartmentsList[i].type === type) {
+        selectPrice.setAttribute('min', window.card.apartmentsList[i].minPrice);
+        selectPrice.setAttribute('placeholder', window.card.apartmentsList[i].minPrice);
       }
-    });
+    }
   }
 
   function onSelectTime(evt) {
     switch (evt.currentTarget.id) {
       case 'timein':
-        selectTime[1].value = evt.target.value;
+        typesOfTime.timeout.value = evt.target.value;
         break;
       case 'timeout':
-        selectTime[0].value = evt.target.value;
+        typesOfTime.timein.value = evt.target.value;
         break;
     }
   }
@@ -69,11 +82,11 @@
     filter.disabled = true;
     map.classList.add('map--faded');
     form.classList.add('ad-form--disabled');
-    window.pins.deletePins();
-    window.card.removeCard();
+    window.pins.delete();
+    window.card.remove();
     window.inactiveMode.disabledAllFildset();
-    window.map.mainPin.style.left = defaultCoords.x + 'px';
-    window.map.mainPin.style.top = defaultCoords.y + 'px';
+    window.inactiveMode.mainPin.style.left = defaultCoords.x + 'px';
+    window.inactiveMode.mainPin.style.top = defaultCoords.y + 'px';
     window.activeMode.onDisable(document.querySelectorAll('.map__filter'), true);
     window.activeMode.onDisable(document.querySelectorAll('.map__checkbox'), true);
     window.activeMode.changeCursor(document.querySelectorAll('.map__filter'), 'default');
@@ -81,9 +94,26 @@
     addFormButton.disabled = true;
     resetFormButton.disabled = true;
     window.activeMode.isActivePage = false;
+
+    inputs.forEach(function (input) {
+      input.style.border = '';
+    });
   }
 
   onBlockPage();
+
+  function onCheckValidity() {
+    // Пройдёмся по всем полям
+    for (var i = 0; i < inputs.length; i++) {
+
+      var input = inputs[i];
+
+      // Проверяю валидность поля
+      if (input.checkValidity() === false) {
+        input.style.border = '2px solid red';
+      }
+    }
+  }
 
   function submitDataToServer(evt) {
     evt.preventDefault();
@@ -97,11 +127,13 @@
     time.addEventListener('change', onSelectTime);
   });
   resetFormButton.addEventListener('click', onBlockPage);
+  addFormButton.addEventListener('click', onCheckValidity);
   form.addEventListener('submit', submitDataToServer);
 
   // Экспорт функций модуля
   window.form = {
-    onSelectRoom: onSelectRoom
+    onSelectRoom: onSelectRoom,
+    onSelectType: onSelectType
   };
 
 })();

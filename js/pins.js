@@ -22,7 +22,7 @@
 
   // добавляем объявление в разметку
   function addPinsToDom(posters) {
-    for (var i = 0; i < posters.length && i < 5; i++) {
+    for (var i = 0; i < posters.length; i++) {
       fragment.appendChild(renderPin(posters[i]));
     }
     mapPinsWrapper.appendChild(fragment);
@@ -38,7 +38,7 @@
 
   // Экспорт функций модуля
   window.pins = {
-    addPinsToDom: addPinsToDom,
-    deletePins: deletePins
+    addToDom: addPinsToDom,
+    delete: deletePins
   };
 })();

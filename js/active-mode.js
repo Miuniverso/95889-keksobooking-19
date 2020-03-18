@@ -9,6 +9,8 @@
   var addFormButton = document.querySelector('.ad-form__submit');
   var resetFormButton = document.querySelector('.ad-form__reset');
   var ESCAPE_KAY = 'Escape';
+  var ENTER_KAY = 'Enter';
+  var TIME_OUT = 2000;
 
   // Импорт данных из других модулей
   var addressInput = window.inactiveMode.addressInput;
@@ -23,9 +25,9 @@
   var isActivePage = false;
 
   //  меняю адрес, исходя из полуенных цифр
-  var changeAddressValue = function (left, top) {
+  function changeAddressValue(left, top) {
     addressInput.value = left + ', ' + top;
-  };
+  }
 
   function closeMessage(msg) {
     document.addEventListener('click', function (evt) {
@@ -52,7 +54,7 @@
     main.appendChild(fragment);
 
 
-    setTimeout(document.addEventListener('click', closeMessage('.error')), 2000);
+    setTimeout(document.addEventListener('click', closeMessage('.error')), TIME_OUT);
   }
 
   // появление "успешного окна"
@@ -101,26 +103,30 @@
 
       changeAddressValue(mainPinLeft, mainPinTop);
 
-      window.serverRequest.loadData(window.filter.filterByData, showErrorMessage);
+      window.serverRequest.loadData(window.filter.update, showErrorMessage);
       window.map.onActivePin();
       window.activeMode.isActivePage = true;
       window.form.onSelectRoom();
+      window.form.onSelectType();
       return;
     }
   }
 
-  mainPin.addEventListener('mousedown', changeOnActiveMode);
   mainPin.addEventListener('keydown', function (evt) {
+    if (evt.key === ENTER_KAY) {
+      changeOnActiveMode();
+    }
+  });
+  mainPin.addEventListener('mousedown', function (evt) {
     if (evt.which === 1) {
-      window.activeMode.changeOnActiveMode();
+      changeOnActiveMode();
     }
   });
 
 
   // Экспорт функций модуля
   window.activeMode = {
-    changeOnActiveMode: changeOnActiveMode,
-    mainPin: mainPin,
+    // activate: changeOnActiveMode,
     MAIN_PIN_WIDTH: MAIN_PIN_WIDTH,
     MAIN_PIN_HEIGHT: MAIN_PIN_HEIGHT,
     MAIN_PIN_POINTER_WIDTH: MAIN_PIN_POINTER_WIDTH,

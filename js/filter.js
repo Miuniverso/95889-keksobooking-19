@@ -22,6 +22,11 @@
     }
   };
 
+  var count = {
+    min: 0,
+    max: 5
+  };
+
   // фильтрация объявлений по выбранному значению в фильтре
   function filterByValue(dataList, filter, checkValue) {
     return dataList.filter(function (data) {
@@ -75,15 +80,15 @@
     });
 
 
-    window.pins.addPinsToDom(newFilterList.slice(0, 5));
-    window.card.addCardToPin(newFilterList.slice(0, 5));
+    window.pins.addToDom(newFilterList.slice(count.min, count.max));
+    window.card.addToPin(newFilterList.slice(count.min, count.max));
 
     return newFilterList;
   }
 
   function updateFilter() {
-    window.pins.deletePins();
-    window.card.removeCard();
+    window.pins.delete();
+    window.card.remove();
     filterByData(filterPosters);
   }
 
@@ -94,7 +99,7 @@
 
   // Экспорт функций модуля
   window.filter = {
-    filterByData: filterByData,
-    filterPosters: filterPosters
+    update: filterByData
+    // filterPosters: filterPosters
   };
 })();
