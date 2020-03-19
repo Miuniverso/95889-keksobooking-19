@@ -18,6 +18,9 @@
     xhr.addEventListener('load', function () {
       if (xhr.status === SUCCESS_CODE) {
         loadHandler(xhr.response);
+        if (data) {
+          window.form.onBlockPage();
+        }
       } else {
         errorHandler('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }

@@ -98,6 +98,7 @@
     inputs.forEach(function (input) {
       input.style.border = '';
     });
+    window.map.deleteActivePin();
   }
 
   onBlockPage();
@@ -133,7 +134,8 @@
   // Экспорт функций модуля
   window.form = {
     onSelectRoom: onSelectRoom,
-    onSelectType: onSelectType
+    onSelectType: onSelectType,
+    onBlockPage: onBlockPage
   };
 
 })();

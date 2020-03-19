@@ -116,13 +116,17 @@
     function cardCloseEvents() {
       btnClose.addEventListener('click', function () {
         newPin.remove();
-        activePin.classList.remove('map__pin--active');
+        allPins.forEach(function (element) {
+          element.classList.remove('map__pin--active');
+        });
       });
 
       document.addEventListener('keydown', function (evt) {
         if (evt.key === ESC_KEY) {
           newPin.remove();
-          activePin.classList.remove('map__pin--active');
+          allPins.forEach(function (element) {
+            element.classList.remove('map__pin--active');
+          });
         }
       });
     }

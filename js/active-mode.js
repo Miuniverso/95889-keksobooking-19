@@ -4,8 +4,8 @@
 
   var MAIN_PIN_POINTER_HEIGHT = 10;
   var MAIN_PIN_POINTER_WIDTH = 22;
-  var MAIN_PIN_WIDTH = 65;
-  var MAIN_PIN_HEIGHT = 65;
+  var MAIN_PIN_WIDTH = 62;
+  var MAIN_PIN_HEIGHT = 62;
   var addFormButton = document.querySelector('.ad-form__submit');
   var resetFormButton = document.querySelector('.ad-form__reset');
   var ESCAPE_KAY = 'Escape';
@@ -30,18 +30,23 @@
   }
 
   function closeMessage(msg) {
-    document.addEventListener('click', function (evt) {
+
+    function clickHendler(evt) {
+      document.removeEventListener('click', clickHendler);
 
       if (evt.target !== document.querySelector(msg + '__message')) {
         document.querySelector(msg).remove();
       }
-    });
+    }
+    document.addEventListener('click', clickHendler);
 
-    window.addEventListener('keydown', function (evt) {
+    function keydownHendler(evt) {
+      window.addEventListener('keydown', keydownHendler);
       if (evt.key === ESCAPE_KAY) {
         document.querySelector(msg).remove();
       }
-    });
+    }
+    window.addEventListener('keydown', keydownHendler);
   }
 
   // появление окна с ошибкой
