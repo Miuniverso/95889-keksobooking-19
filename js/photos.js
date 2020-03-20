@@ -46,14 +46,14 @@
     }
   }
 
-  function avatarChangeHandler() {
+  function onChangeAvatar() {
     addPhoto(avatarChooser, avatarPreview);
   }
 
-  function photoChangeHandler() {
+  function onChangePhoto() {
     addPhoto(photoApartmentsChooser, generatePhoto());
   }
 
-  avatarChooser.addEventListener('change', avatarChangeHandler);
-  photoApartmentsChooser.addEventListener('change', photoChangeHandler);
+  avatarChooser.addEventListener('change', onChangeAvatar);
+  photoApartmentsChooser.addEventListener('change', onChangePhoto);
 })();

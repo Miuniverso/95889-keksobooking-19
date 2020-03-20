@@ -104,6 +104,7 @@
   onBlockPage();
 
   function onCheckValidity() {
+
     // Пройдёмся по всем полям
     for (var i = 0; i < inputs.length; i++) {
 
@@ -114,6 +115,7 @@
         input.style.border = '2px solid red';
       }
     }
+    addFormButton.removeEventListener('click', onCheckValidity);
   }
 
   function submitDataToServer(evt) {

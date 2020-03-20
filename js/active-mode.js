@@ -29,24 +29,25 @@
     addressInput.value = left + ', ' + top;
   }
 
-  function closeMessage(msg) {
+  function closeMessageOnClick(evt) {
 
-    function clickHendler(evt) {
-      document.removeEventListener('click', clickHendler);
+    if (evt.target !== document.querySelector('success__message')) {
 
-      if (evt.target !== document.querySelector(msg + '__message')) {
-        document.querySelector(msg).remove();
-      }
+      var successMessage = document.querySelector('.success');
+
+      successMessage.removeEventListener('click', closeMessageOnClick);
+      successMessage.remove();
     }
-    document.addEventListener('click', clickHendler);
+  }
 
-    function keydownHendler(evt) {
-      window.addEventListener('keydown', keydownHendler);
-      if (evt.key === ESCAPE_KAY) {
-        document.querySelector(msg).remove();
-      }
+  function closeMessageOnKeyDown(evt) {
+
+    if (evt.key === ESCAPE_KAY) {
+      var successMessage = document.querySelector('.success');
+
+      window.removeEventListener('keydown', closeMessageOnKeyDown);
+      successMessage.remove();
     }
-    window.addEventListener('keydown', keydownHendler);
   }
 
   // появление окна с ошибкой
@@ -59,7 +60,7 @@
     main.appendChild(fragment);
 
 
-    setTimeout(document.addEventListener('click', closeMessage('.error')), TIME_OUT);
+    setTimeout(document.addEventListener('click', closeMessageOnClick), TIME_OUT);
   }
 
   // появление "успешного окна"
@@ -70,12 +71,8 @@
     fragment.appendChild(successClone);
     main.appendChild(fragment);
     // Закрытие окна
-    document.querySelector('.success').addEventListener('click', closeMessage('.success'));
-    document.addEventListener('keydown', function (evt) {
-      if (evt.key === ESCAPE_KAY) {
-        closeMessage('.success');
-      }
-    });
+    document.querySelector('.success').addEventListener('click', closeMessageOnClick);
+    window.addEventListener('keydown', closeMessageOnKeyDown);
   }
 
   function onDisable(list, value) {
@@ -117,16 +114,16 @@
     }
   }
 
-  mainPin.addEventListener('keydown', function (evt) {
-    if (evt.key === ENTER_KAY) {
+  function onActivate(evt) {
+    if (evt.key === ENTER_KAY || evt.which === 1) {
+      mainPin.removeEventListener('keydown', onActivate);
       changeOnActiveMode();
     }
-  });
-  mainPin.addEventListener('mousedown', function (evt) {
-    if (evt.which === 1) {
-      changeOnActiveMode();
-    }
-  });
+  }
+
+  mainPin.addEventListener('keydown', onActivate);
+
+  mainPin.addEventListener('mousedown', onActivate);
 
 
   // Экспорт функций модуля

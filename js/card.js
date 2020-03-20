@@ -92,43 +92,48 @@
     cardClone.querySelector('.popup__description').textContent = poster.offer.description;
     return cardClone;
   }
+  var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+
 
   var map = document.querySelector('.map');
   var mapFilter = document.querySelector('map__filters-container');
+
+  // удаление стиля активной метки
+  function remoteActivePin() {
+    allPins.forEach(function (element) {
+      element.classList.remove('map__pin--active');
+    });
+  }
 
   // удаление карточки
   function removeCard() {
     var cardOnMap = map.querySelector('.map__card');
     if (cardOnMap) {
       cardOnMap.remove();
-      var activePin = document.querySelector('.map__pin--active');
-      activePin.classList.remove('map__pin--active');
+      remoteActivePin();
     }
   }
 
   function addCardToPin(posters) {
     var cardToPin = document.createDocumentFragment();
-    var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
     var newPin;
     var btnClose;
     var activePin;
 
-    function cardCloseEvents() {
-      btnClose.addEventListener('click', function () {
-        newPin.remove();
-        allPins.forEach(function (element) {
-          element.classList.remove('map__pin--active');
-        });
-      });
+    function onClickCard() {
+      btnClose.removeEventListener('click', onClickCard);
+      newPin.remove();
+      remoteActivePin();
+    }
 
-      document.addEventListener('keydown', function (evt) {
-        if (evt.key === ESC_KEY) {
-          newPin.remove();
-          allPins.forEach(function (element) {
-            element.classList.remove('map__pin--active');
-          });
-        }
-      });
+    function onKeyDownCard(evt) {
+
+      if (evt.key === ESC_KEY) {
+        document.removeEventListener('keydown', onKeyDownCard);
+        newPin.remove();
+        remoteActivePin();
+      }
     }
 
     posters.forEach(function (pin, index) {
@@ -148,7 +153,9 @@
         btnClose = newPin.querySelector('.popup__close');
         map.insertBefore(newPin, mapFilter);
 
-        cardCloseEvents();
+        btnClose.addEventListener('click', onClickCard);
+
+        document.addEventListener('keydown', onKeyDownCard);
       });
     });
   }

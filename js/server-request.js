@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var Url = {
+  var urls = {
     get: 'https://js.dump.academy/keksobooking/data',
     post: 'https://js.dump.academy/keksobooking'
   };
@@ -11,7 +11,7 @@
   var METHOD_SAVE = 'POST';
   var SUCCESS_CODE = 200;
 
-  var sendXMLHttpRequest = function (url, method, data, loadHandler, errorHandler) {
+  function sendXMLHttpRequest(url, method, data, loadHandler, errorHandler) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -38,14 +38,14 @@
     xhr.open(method, url);
     var params = data ? data : new FormData();
     xhr.send(params);
-  };
+  }
 
   function loadData(loadHandler, errorHandler) {
-    sendXMLHttpRequest(Url.get, METHOD_LOAD, false, loadHandler, errorHandler);
+    sendXMLHttpRequest(urls.get, METHOD_LOAD, false, loadHandler, errorHandler);
   }
 
   function postData(data, loadHandler, errorHandler) {
-    sendXMLHttpRequest(Url.post, METHOD_SAVE, data, loadHandler, errorHandler);
+    sendXMLHttpRequest(urls.post, METHOD_SAVE, data, loadHandler, errorHandler);
   }
 
   // Экспорт данных из модуля
