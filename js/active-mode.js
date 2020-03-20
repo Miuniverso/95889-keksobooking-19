@@ -8,8 +8,8 @@
   var MAIN_PIN_HEIGHT = 62;
   var addFormButton = document.querySelector('.ad-form__submit');
   var resetFormButton = document.querySelector('.ad-form__reset');
-  var ESCAPE_KAY = 'Escape';
-  var ENTER_KAY = 'Enter';
+  var ESCAPE_KEY = 'Escape';
+  var ENTER_KEY = 'Enter';
   var TIME_OUT = 2000;
 
   // Импорт данных из других модулей
@@ -42,7 +42,7 @@
 
   function closeMessageOnKeyDown(evt) {
 
-    if (evt.key === ESCAPE_KAY) {
+    if (evt.key === ESCAPE_KEY) {
       var successMessage = document.querySelector('.success');
 
       window.removeEventListener('keydown', closeMessageOnKeyDown);
@@ -115,7 +115,7 @@
   }
 
   function onActivate(evt) {
-    if (evt.key === ENTER_KAY || evt.which === 1) {
+    if (evt.key === ENTER_KEY || evt.which === 1) {
       mainPin.removeEventListener('keydown', onActivate);
       changeOnActiveMode();
     }
@@ -128,12 +128,10 @@
 
   // Экспорт функций модуля
   window.activeMode = {
-    // activate: changeOnActiveMode,
     MAIN_PIN_WIDTH: MAIN_PIN_WIDTH,
     MAIN_PIN_HEIGHT: MAIN_PIN_HEIGHT,
     MAIN_PIN_POINTER_WIDTH: MAIN_PIN_POINTER_WIDTH,
     MAIN_PIN_POINTER_HEIGHT: MAIN_PIN_POINTER_HEIGHT,
-    addressInput: addressInput,
     changeAddressValue: changeAddressValue,
     isActivePage: isActivePage,
     onDisable: onDisable,

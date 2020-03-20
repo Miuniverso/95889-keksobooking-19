@@ -40,6 +40,7 @@
     for (var i = 0; i < apartmentsList.length; i++) {
       if (apartmentsList[i].type === type) {
         translate = apartmentsList[i].translate;
+        break;
       }
     }
     return translate;

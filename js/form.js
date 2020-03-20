@@ -61,6 +61,7 @@
       if (window.card.apartmentsList[i].type === type) {
         selectPrice.setAttribute('min', window.card.apartmentsList[i].minPrice);
         selectPrice.setAttribute('placeholder', window.card.apartmentsList[i].minPrice);
+        break;
       }
     }
   }
@@ -79,6 +80,9 @@
   function onBlockPage() {
     form.reset();
     filter.reset();
+    onSelectType();
+    // решила сразу привести и выбор комнат с гостями в порядок
+    onSelectRoom();
     filter.disabled = true;
     map.classList.add('map--faded');
     form.classList.add('ad-form--disabled');

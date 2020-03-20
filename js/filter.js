@@ -66,9 +66,9 @@
   }
 
   function filter(pins) {
-    window.filter.filterPosters = pins;
+    window.filter.posters = pins;
 
-    var filteredPosters = []; // в этот массив будем собирать элементы, подходящие под фильтрацию
+    var posters = []; // в этот массив будем собирать элементы, подходящие под фильтрацию
 
 
     for (var i = Count.MIN; i < pins.length; i++) {
@@ -79,22 +79,22 @@
         && isNumber(pin.offer.guests, housingGuests.value)
         && isFeatures(pin.offer.features, housingFeatures.elements)
         && isOffer(pin)) {
-        filteredPosters.push(pins[i]);
+        posters.push(pins[i]);
       }
       // если в новом массиве уже 5 элементов
-      if (filteredPosters.length === Count.MAX) {
+      if (posters.length === Count.MAX) {
         break;
       }
     }
-    window.pins.addToDom(filteredPosters);
-    window.card.addToPin(filteredPosters);
-    return filteredPosters;
+    window.pins.addToDom(posters);
+    window.card.addToPin(posters);
+    return posters;
   }
 
   function updateFilter() {
     window.pins.delete();
     window.card.remove();
-    filter(window.filter.filterPosters);
+    filter(window.filter.posters);
   }
 
   var changeFilter = window.optimization.debaunce(updateFilter);
