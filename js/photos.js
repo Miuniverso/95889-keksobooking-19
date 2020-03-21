@@ -12,6 +12,8 @@
     height: 40
   };
 
+  var defaultAvatar = 'img/muffin-grey.svg';
+
   function generatePhoto() {
     // проверка на наличие фото
     if (document.querySelector('.ad-form__photo').querySelector('img')) {
@@ -25,6 +27,14 @@
     photoApartmentsPreview.appendChild(photo);
 
     return photo;
+  }
+
+  function deleteAllPhotoPreview() {
+    if (document.querySelector('.ad-form__photo').querySelector('img')) {
+      document.querySelector('.ad-form__photo').querySelector('img').remove();
+    }
+
+    document.querySelector('.ad-form-header__preview').querySelector('img').setAttribute('src', defaultAvatar);
   }
 
   function addPhoto(photoChooser, photo) {
@@ -56,4 +66,9 @@
 
   avatarChooser.addEventListener('change', onChangeAvatar);
   photoApartmentsChooser.addEventListener('change', onChangePhoto);
+
+  // Экспорт функций модуля
+  window.photos = {
+    delete: deleteAllPhotoPreview
+  };
 })();

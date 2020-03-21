@@ -80,6 +80,7 @@
   function onBlockPage() {
     form.reset();
     filter.reset();
+    window.photos.delete();
     onSelectType();
     // решила сразу привести и выбор комнат с гостями в порядок
     onSelectRoom();
