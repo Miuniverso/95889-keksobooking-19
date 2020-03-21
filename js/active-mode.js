@@ -8,6 +8,7 @@
   var MAIN_PIN_HEIGHT = 62;
   var addFormButton = document.querySelector('.ad-form__submit');
   var resetFormButton = document.querySelector('.ad-form__reset');
+  var errorButton = document.querySelector('.error__button');
   var ESCAPE_KEY = 'Escape';
   var ENTER_KEY = 'Enter';
   var TIME_OUT = 2000;
@@ -29,24 +30,42 @@
     addressInput.value = left + ', ' + top;
   }
 
+  function closeMessage(type) {
+    document.querySelector(type).removeEventListener('click', closeMessageOnClick);
+    window.removeEventListener('keydown', closeMessageOnKeyDown);
+    document.querySelector(type).remove();
+    window.form.onBlockPage();
+  }
+
   function closeMessageOnClick(evt) {
+    var error = document.querySelector('.error');
+    var success = document.querySelector('.success');
 
-    if (evt.target !== document.querySelector('success__message')) {
+    if (document.querySelector('main').lastChild === error) {
+      if (evt.currentTarget === errorButton || evt.target !== document.querySelector('.error__message')) {
+        closeMessage('.error');
+      }
+    }
 
-      var successMessage = document.querySelector('.success');
-
-      successMessage.removeEventListener('click', closeMessageOnClick);
-      successMessage.remove();
+    if (document.querySelector('main').lastChild === success) {
+      if (evt.target !== document.querySelector('.success__message')) {
+        closeMessage('.success');
+      }
     }
   }
 
   function closeMessageOnKeyDown(evt) {
+    var error = document.querySelector('.error');
+    var success = document.querySelector('.success');
 
     if (evt.key === ESCAPE_KEY) {
-      var successMessage = document.querySelector('.success');
+      if (document.querySelector('main').lastChild === error) {
+        closeMessage('.error');
+      }
 
-      window.removeEventListener('keydown', closeMessageOnKeyDown);
-      successMessage.remove();
+      if (document.querySelector('main').lastChild === success) {
+        closeMessage('.success');
+      }
     }
   }
 
@@ -60,7 +79,8 @@
     main.appendChild(fragment);
 
 
-    setTimeout(document.addEventListener('click', closeMessageOnClick), TIME_OUT);
+    setTimeout(document.querySelector('.error').addEventListener('click', closeMessageOnClick), TIME_OUT);
+    setTimeout(window.addEventListener('keydown', closeMessageOnKeyDown), TIME_OUT);
   }
 
   // появление "успешного окна"
